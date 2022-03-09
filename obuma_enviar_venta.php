@@ -182,7 +182,8 @@ function enviar_orden_venta($data){
 
   $json = ObumaConector::post(set_url()."ventasIntegracionExternas.create.json",$data_enviar,get_option("api_key"));
 
-  $return = array('peticion' => $data_enviar , "respuesta" => $json );
+
+  $return = array('peticion' => $data_enviar , "respuesta" => $json);
 
   return $return;
 }

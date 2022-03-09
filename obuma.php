@@ -94,6 +94,11 @@ function load_css_js_frontend($page){
     wp_enqueue_script("obuma_js");
 }
 
+function return_alert(){
+
+
+        wc_add_notice( __('Oups! The order key is invalid…', 'woocommerce'), 'error');
+}
 
 function cargar_archivos($page){
 
@@ -358,23 +363,34 @@ function call_order_status_changed($order_id,$old,$new){
         
             $response = enviar_orden_venta($data);
 
+
             $datos_log  = array('data' => $response["peticion"], "response" => $response["respuesta"],"estado" => strtolower($new));
             insert_order_obuma_log($datos_log,$order_id);
 
-       
-            if (isset($response["respuesta"]->result->result_dte[0]->dte_result) && $response["respuesta"]->result->result_dte[0]->dte_result == "OK") {
-                insert_order_obuma(
-                    array('order_woocommerce_id' => $order_id,
-                          'dte_id' => $response["respuesta"]->result->result_dte[0]->dte_id,
-                          'dte_tipo' => $response["respuesta"]->result->result_dte[0]->dte_tipo,
-                          'dte_folio' => $response["respuesta"]->result->result_dte[0]->dte_folio,
-                          'dte_result' => $response["respuesta"]->result->result_dte[0]->dte_result,
-                          'dte_xml' => $response["respuesta"]->result->result_dte[0]->dte_xml,
-                          'dte_pdf' => $response["respuesta"]->result->result_dte[0]->dte_pdf
-                            )
-                );
-            }
+            if(isset($response["respuesta"]->result->result_dte[0]->dte_id)){
+             
 
+                update_post_meta( $data["orden_id"], 'obuma_url_pdf', $response["respuesta"]->result->result_dte[0]->dte_pdf );
+
+                insert_order_obuma(
+                        array('order_woocommerce_id' => $order_id,
+                              'dte_id' => $response["respuesta"]->result->result_dte[0]->dte_id,
+                              'dte_tipo' => $response["respuesta"]->result->result_dte[0]->dte_tipo,
+                              'dte_folio' => $response["respuesta"]->result->result_dte[0]->dte_folio,
+                              'dte_result' => $response["respuesta"]->result->result_dte[0]->dte_result,
+                              'dte_xml' => $response["respuesta"]->result->result_dte[0]->dte_xml,
+                              'dte_pdf' => $response["respuesta"]->result->result_dte[0]->dte_pdf
+                                )
+                );
+
+
+            }else{
+
+                    $order = wc_get_order($data["orden_id"]);
+                    $order->update_status('on-hold');
+
+                    
+            }
 
             }else{
                 $datos_log  = array('data' => [], "response" => [],"estado" => strtolower($new));
