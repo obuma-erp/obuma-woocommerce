@@ -40,7 +40,7 @@ jQuery(document).ready(function(){
   if (pagina == "productos_imagenes" || pagina == "precios" || pagina == "productos"  || pagina == "stock") {
     jQuery.ajax({
     method : "POST",
-    url : "../wp-content/plugins/obuma/admin/categorias.php",
+    url : "../wp-content/plugins/obuma-woocommerce-main/admin/categorias.php",
     data : {
       obtener : true
     },
@@ -159,7 +159,7 @@ jQuery(document).ready(function(){
     var pagina = parseInt(numero_pagina) + 1;
     jQuery.ajax({
       method : "POST",
-      url : "../wp-content/plugins/obuma/admin/" + url,
+      url : "../wp-content/plugins/obuma-woocommerce-main/admin/" + url,
       data : { 
         pagina : pagina,
         categorias_seleccionadas : categorias_seleccionadas
@@ -209,7 +209,7 @@ jQuery(document).ready(function(){
       var result = JSON.parse(response);
       console.log(result);
       if (result.completado == result.total) {
-          jQuery(".lds-spinner").html("<img style='width:100%;margin-bottom:5px;' src='../wp-content/plugins/obuma/admin/images/notification_done.png'>")
+          jQuery(".lds-spinner").html("<img style='width:100%;margin-bottom:5px;' src='../wp-content/plugins/obuma-woocommerce-main/admin/images/notification_done.png'>")
           finalizar();
           jQuery("#texto-resumen").css("color","#337ab7")
           jQuery("#texto-log").css("color","#337ab7")
@@ -405,7 +405,7 @@ if(document.getElementById("sincronizar_comunas")){
   document.getElementById("sincronizar_comunas").addEventListener("click",function(){
   this.setAttribute("disabled","disabled")
 
-    fetch("../wp-content/plugins/obuma/admin/set_comunas.php", {
+    fetch("../wp-content/plugins/obuma-woocommerce-main/admin/set_comunas.php", {
       method: 'get'
     }).then(function(response) {
       return response.json();
@@ -435,7 +435,7 @@ if(document.getElementById("limpiar_registros")){
   document.getElementById("limpiar_registros").addEventListener("click",function(){
   this.setAttribute("disabled","disabled")
 
-    fetch("../wp-content/plugins/obuma/admin/limpiar_registros.php", {
+    fetch("../wp-content/plugins/obuma-woocommerce-main/admin/limpiar_registros.php", {
       method: 'get'
     }).then(function(response) {
       return response.json();

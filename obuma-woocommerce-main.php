@@ -97,7 +97,7 @@ function load_css_js_frontend($page){
 
 function cargar_archivos($page){
 
-    if ($page != "obuma/admin/sincronizar_obuma.php" && $page != "obuma/admin/configuracion.php") {
+    if ($page != "obuma-woocommerce-main/admin/sincronizar_obuma.php" && $page != "obuma-woocommerce-main/admin/configuracion.php") {
         return;
     }
 
