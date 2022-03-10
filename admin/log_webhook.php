@@ -7,7 +7,7 @@ class LogWebhookTable extends Obuma_List_Table {
 
 	private $order;
   private $orderby;
-  private $items_per_page = 10;
+  private $items_per_page = 20;
   private $desde;
   private $hasta;
 

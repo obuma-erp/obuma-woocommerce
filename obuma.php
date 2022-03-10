@@ -94,11 +94,6 @@ function load_css_js_frontend($page){
     wp_enqueue_script("obuma_js");
 }
 
-function return_alert(){
-
-
-        wc_add_notice( __('Oups! The order key is invalid…', 'woocommerce'), 'error');
-}
 
 function cargar_archivos($page){
 
@@ -478,17 +473,33 @@ function custom_override_checkout_fields($fields){
 
 function admin_view_order_billing($order){
 
-    echo '<p><strong style="display:flex;">'.__('R.U.T.').':</strong> ' . get_post_meta( $order->get_id(), '_billing_rut', true ) . '</p>';
-    echo '<p><strong style="display:flex;">'.__('Giro comercial').':</strong> ' . get_post_meta( $order->get_id(), '_billing_giro_comercial', true ) . '</p>';
-    echo '<p><strong style="display:flex;">'.__('Tipo de documento').':</strong> ' ;
+    if(!empty(get_post_meta( $order->get_id(), '_billing_rut', true ))){
+        echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . get_post_meta( $order->get_id(), '_billing_rut', true ) . '</p>';
+    }
+    
+    if(!empty(get_post_meta( $order->get_id(), '_billing_giro_comercial', true ))){
+        echo '<p><strong style="display:flex;">'.__('Giro comercial').':</strong> ' . get_post_meta( $order->get_id(), '_billing_giro_comercial', true ) . '</p>';
+    }
+    
 
-    if(get_post_meta( $order->get_id(), '_billing_tipo_documento', true) == '39'){
-        echo "Boleta";
-    }else{
-        echo "Factura";
+    if(!empty(get_post_meta( $order->get_id(), '_billing_tipo_documento', true))){
+
+        echo '<p><strong style="">'.__('Tipo de documento').':<br></strong> ' ;
+
+        if(get_post_meta( $order->get_id(), '_billing_tipo_documento', true) == '39'){
+            echo "Boleta";
+        }else{
+            echo "Factura";
+        }
+        echo  '</p>';
+
     }
 
-     echo  '</p>';
+    if(!empty(get_post_meta( $order->get_id(), 'obuma_url_pdf', true))){
+        echo "<p><a target='__blank' href='".get_post_meta( $order->get_id(), 'obuma_url_pdf', true)."'>Ver DTE Generada en OBUMA</a></p>";
+    }
+    
+     
 }
 
 function oml_custom_checkout_field_display_admin_order_meta($order){

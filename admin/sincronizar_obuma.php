@@ -12,7 +12,7 @@
 
  
 if (isset($json->data[0]->empresa_id) && $json->data[0]->empresa_id > 0) {
- echo "<div class='alert alert-success'>";
+ echo "<div class='alert alert-success' style='border:1px solid #0b8a71;'>";
  echo "<strong>Se conectó a la API de Obuma correctamente </strong><br>";
  echo "Id de la empresa : {$json->data[0]->empresa_id}<br>";
  echo "Rut de la empresa : {$json->data[0]->empresa_rut}<br>";

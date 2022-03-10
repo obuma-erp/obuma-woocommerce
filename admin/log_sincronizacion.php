@@ -7,7 +7,7 @@ class LogSincronizacionTable extends Obuma_List_Table {
 
 	private $order;
   private $orderby;
-  private $items_per_page = 10;
+  private $items_per_page = 30;
   private $desde;
   private $hasta;
 
