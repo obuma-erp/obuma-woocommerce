@@ -14,10 +14,10 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 </style>
 <div class="panel panel-info">
 <div class="panel-heading bg-white">
-	<?php _e('VARIABLES DE CONFIGURACION DE OBUMA', 'obuma') ?>
+	<?php _e('VARIABLES DE CONFIGURACI&Oacute;N DE OBUMA', 'obuma') ?>
 </div>
 <div class='panel-body'>
-	<p><?php _e('Establece tus variables de Configuracion,para conectar con OBUMA','obuma') ?></p>
+	<p><?php _e('Establece tus variables de Configuraci&oacute;n,para conectar con OBUMA','obuma') ?></p>
 	
 	<div class="wrap">
 		<?php if (isset($_POST["config"])) {
@@ -58,7 +58,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 				echo '<div id="message" class="notice notice-success"><p><strong>Todos los datos fueron guardados.</strong></p></div>';
 				} 
 		?>
-		<form method="post" action="" style="width: 70%;">
+		<form method="post" action="" style="width: 100%;">
 			<?php 
 				settings_fields("obuma-settings-group"); 
 				do_settings_sections("obuma-settings-group");
@@ -66,44 +66,44 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 			<table class="form-table">
 				<tr class="form-field form-required">
 					<th><label>RUT EMPRESA</label></th>
-					<td>
+					<td width="40%;">
 				<input type="hidden" name="config">
-			<input type="text" name="rut_empresa" class="form-control" id="rut_empresa" placeholder="Introduce Rut Empresa" required value="<?php echo get_option("rut_empresa"); ?>"></td>
+			<input type="text" name="rut_empresa" class="form-control" id="rut_empresa" placeholder="Ingrese el RUT de la empresa" required value="<?php echo get_option("rut_empresa"); ?>"></td>
 				</tr>
 
 
 				<tr class="form-field form-required">
 					<th><label>API KEY</label></th>
-					<td>
-			<input type="password" name="api_key"  class="form-control" id="api_key" placeholder="Introduce API KEY" required  value="<?php echo get_option("api_key"); ?>"></td>
+					<td width="40%;">
+			<input type="password" name="api_key"  class="form-control" id="api_key" placeholder="Ingrese API KEY" required  value="<?php echo get_option("api_key"); ?>"></td>
 				</tr>
 
 				<tr class="form-field form-required">
 					<th><label>API URL</label></th>
-					<td>
-			<input type="text" name="url_obuma"  class="form-control" id="url_obuma" placeholder="Introduce URL" required  value="<?php echo get_option("url_obuma"); ?>">
+					<td width="40%;">
+			<input type="text" name="url_obuma"  class="form-control" id="url_obuma" placeholder="Ingrese URL" required  value="<?php echo get_option("url_obuma"); ?>">
 			<em style='color:#e74c3c;font-size: 0.8em;'>URL para conectarse a la API de  Obuma - ej. https://api.obuma.cl/v1.0 </em>
 		</td>
 				</tr>
 
 				<tr class="form-field form-required">
 					<th><label>SUCURSAL</label></th>
-					<td>
-				<input type="text" name="sucursal" class="form-control" id="sucursal" placeholder="Introduce la sucursal" value="<?php echo get_option("sucursal"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo sucursal desea vincular a las ventas por woocommerce</em>
+					<td width="40%;">
+				<input type="text" name="sucursal" class="form-control" id="sucursal" placeholder="Ingrese el c&oacute;digo de la sucursal" value="<?php echo get_option("sucursal"); ?>">
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la sucursal que desea vincular a las ventas por woocommerce</em>
 
 				</td>
 				</tr>
 
 					<tr class="form-field form-required">
 					<th><label>BODEGA</label></th>
-					<td>
-				<input type="text" name="bodega" class="form-control" id="bodega" placeholder="Introduce la Bodega" value="<?php echo get_option("bodega"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo bodega desea vincular a las ventas por woocommerce</em>
+					<td width="40%;">
+				<input type="text" name="bodega" class="form-control" id="bodega" placeholder="Ingrese el c&oacute;digo de la bodega" value="<?php echo get_option("bodega"); ?>">
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la bodega que desea vincular a las ventas por woocommerce</em>
 
 				</td>
-				<td>
-					<input type="text" name="id_bodega" class="form-control" id="id_bodega" placeholder="Introduce el id Bodega" value="<?php echo get_option("id_bodega"); ?>">
+				<td width="40%;">
+					<input type="text" name="id_bodega" class="form-control" id="id_bodega" placeholder="Ingrese el id bodega" value="<?php echo get_option("id_bodega"); ?>">
 				<em style='color:#e74c3c;font-size: 0.8em;'>ID de la bodega</em>
 				</td>
 				</tr>
@@ -111,9 +111,9 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 				<tr class="form-field form-required">
 					<th><label>VENDEDOR</label></th>
-					<td>
-				<input type="text" name="vendedor" class="form-control" id="vendedor" placeholder="Introduce al vendedor" value="<?php echo get_option("vendedor"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del vendedor desea vincular a las ventas por woocommerce</em>
+					<td width="40%;">
+				<input type="text" name="vendedor" class="form-control" id="vendedor" placeholder="Ingrese el c&oacute;digo del vendedor" value="<?php echo get_option("vendedor"); ?>">
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del vendedor que desea vincular a las ventas por woocommerce</em>
 
 			</td>
 				</tr>
@@ -121,9 +121,9 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 				<tr class="form-field form-required">
 					<th><label>USUARIO</label></th>
-					<td>
-				<input type="text" name="usuario"  class="form-control" id="usuario" placeholder="Introduce la usuario" value="<?php echo get_option("usuario"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo Usuario desea vincular a las ventas por woocommerce</em>
+					<td width="40%;">
+				<input type="text" name="usuario"  class="form-control" id="usuario" placeholder="Ingrese el c&oacute;digo del usuario" value="<?php echo get_option("usuario"); ?>">
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del usuario que desea vincular a las ventas por woocommerce</em>
 
 				</td>
 				</tr>
@@ -132,9 +132,9 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 				<tr class="form-field form-required">
 					<th><label>CANAL DE VENTA</label></th>
-					<td>
-				<input type="text" name="canal_venta"  class="form-control" id="canal_venta" placeholder="Introduce el codigo del canal de venta" value="<?php echo get_option("canal_venta"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del canal de venta  desea vincular a las ventas por woocommerce</em>
+					<td width="40%;">
+				<input type="text" name="canal_venta"  class="form-control" id="canal_venta" placeholder="Ingrese el codigo del canal de venta" value="<?php echo get_option("canal_venta"); ?>">
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del canal de venta que desea vincular a las ventas por woocommerce</em>
 
 				</td>
 				</tr>
@@ -142,25 +142,25 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 				<tr class="form-field form-required">
 					<th><label>LISTA PRECIO</label></th>
-					<td>
-				<input type="text" name="lista_precio" class="form-control" id="lista_precio" placeholder="Introduce lista precio" value="<?php echo get_option("lista_precio"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo Lista de precio desea vincular a las ventas por woocommerce</em>
+					<td width="40%;">
+				<input type="text" name="lista_precio" class="form-control" id="lista_precio" placeholder="Ingrese el c&oacute;digo de la lista de precio" value="<?php echo get_option("lista_precio"); ?>">
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la lista de precio que desea vincular a las ventas por woocommerce</em>
 
 				</td>
 				</tr>
 
 				<tr class="form-field form-required">
 					<th><label>CÓDIGO FORMA DE PAGO</label></th>
-					<td>
-				<input type="text" name="codigo_forma_pago" class="form-control" id="codigo_forma_pago" placeholder="Introduce código forma de pago" value="<?php echo get_option("codigo_forma_pago"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo forma de pago desea vincular a las ventas por woocommerce</em>
+					<td width="40%;">
+				<input type="text" name="codigo_forma_pago" class="form-control" id="codigo_forma_pago" placeholder="Ingrese el c&oacute;digo de la forma de pago" value="<?php echo get_option("codigo_forma_pago"); ?>">
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la forma de pago que desea vincular a las ventas por woocommerce</em>
 
 				</td>
 				</tr>
 
 				<tr class="form-field form-required">
 					<th><label>REBAJAR STOCK</label></th>
-					<td>
+					<td >
 				<input type="radio" value="0" name="rebajar_stock" class="form-control" id="rebajar_stock" <?php if(get_option("rebajar_stock") == 0){ echo "checked";} ?>> No 
 				<input type="radio" name="rebajar_stock" class="form-control" id="rebajar_stock" value="1" <?php if(get_option("rebajar_stock") == 1){ echo "checked";} ?>> Si 
 			</td>
@@ -200,7 +200,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 				<input type="radio" value="0" name="registrar_cobro" class="form-control" id="registrar_cobro" <?php if(get_option("registrar_cobro") == 0){ echo "checked";} ?>> No 
 				<input type="radio" name="registrar_cobro" class="form-control" id="registrar_cobro" value="1" <?php if(get_option("registrar_cobro") == 1){ echo "checked";} ?>> Si 
 				<br>
-				<em style='color:#e74c3c;font-size: 0.8em;'>Registra en obuma el cobro</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>Registra el cobro en OBUMA</em>
 
 			</td>
 				</tr>
@@ -295,7 +295,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 				<tr class="form-field form-required">
 					<th><label>Limpiar registros antiguos</label></th>
 					<td>
-				<button type="button" id="limpiar_registros" class="btn btn-primary">Iniciar limpieza</button>
+				<button type="button" id="limpiar_registros" class="btn btn-info">Iniciar limpieza</button>
 				<span id="update_limpiar_registros_message">
 					<?php if(!empty(get_option("update_limpiar_registros_date"))){
 					 echo 'Ultima Limpieza : ';
@@ -322,8 +322,11 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 			</table>
 
 
+			<div style="display: flex;justify-content: flex-end;">
+				<?php submit_button(); ?>
+			</div>
 		
-			<?php submit_button(); ?>
+			
 		</form>
 		
 	</div>

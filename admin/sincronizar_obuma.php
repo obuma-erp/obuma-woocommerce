@@ -2,7 +2,7 @@
 <hr>
 <div class="panel panel-info" style="height: auto;">
 <div class="panel-heading bg-white">
-  <?php _e('Panel de Sincronización con la API OBUMA','obuma') ?>
+  <?php _e('Panel de Sincronización con la API de OBUMA','obuma') ?>
 </div>
 <div class='panel-body'>
   
@@ -13,7 +13,7 @@
  
 if (isset($json->data[0]->empresa_id) && $json->data[0]->empresa_id > 0) {
  echo "<div class='alert alert-success' style='border:1px solid #0b8a71;'>";
- echo "<strong>Se conectó a la API de Obuma correctamente </strong><br>";
+ echo "<strong>Se conect&oacute; correctamente  con la API de Obuma</strong><br>";
  echo "Id de la empresa : {$json->data[0]->empresa_id}<br>";
  echo "Rut de la empresa : {$json->data[0]->empresa_rut}<br>";
  echo "Razón social : {$json->data[0]->empresa_razon_social}<br>";
@@ -21,7 +21,7 @@ if (isset($json->data[0]->empresa_id) && $json->data[0]->empresa_id > 0) {
  echo "</div>";
 }else{
  echo "<div class='alert alert-danger'>";
- echo "<strong>Hubo un error  al conectar con la API de Obuma,verifique el API KEY registrado en la configuración del plugin . <a class='btn btn-primary' href='admin.php?page=obuma/admin/configuracion.php'>Ir a la configuraci&oacute;n</a></strong><br>";
+ echo "<strong>Hubo un error  al conectar con la API de Obuma,verifique el API KEY registrado en la configuraci&oacute;n del plugin . <a class='btn btn-primary' href='admin.php?page=obuma/admin/configuracion.php'>Ir a la configuraci&oacute;n</a></strong><br>";
 
  echo "</div>";
 }
