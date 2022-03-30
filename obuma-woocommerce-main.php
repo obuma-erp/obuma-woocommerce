@@ -253,7 +253,9 @@ function call_order_status_changed($order_id,$old,$new){
                 }
             }
                 
-                
+            
+            $data["contacto"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
+
             $data["direccion"] = get_post_meta($id, '_billing_address_1', true) . " - " . get_post_meta($id, '_billing_address_2', true);
 
             $data_comuna = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."obuma_comunas WHERE pg_comuna_codigo_chilexpress='".get_post_meta($id, '_billing_state', true)."'");

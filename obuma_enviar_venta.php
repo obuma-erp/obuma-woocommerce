@@ -139,7 +139,8 @@ function enviar_orden_venta($data){
     'venta_observacion'           => $data["observacion"],                      //Obtenido del checkout de la tienda
     'cliente_actualizar_datos'    => $data["cliente_actualizar_datos"],         // Definido en la configuracion del plugin
     'cliente_rut'                 => $data["rut"],                              //Obtenido del checkout de la tienda
-    'cliente_razon_social'        => $data["razon_social"],                     //Obtenido del checkout de la tienda
+    'cliente_razon_social'        => $data["razon_social"],
+    'cliente_contacto'            => $data["contacto"],                    //Obtenido del checkout de la tienda
     'cliente_direccion'           => $data["direccion"],                        //Obtenido del checkout de la tienda
     'cliente_comuna'              => $data["comuna"],                           //Obtenido del checkout de la tienda
     'cliente_region'              => $data["region"],                           //Obtenido del checkout de la tienda

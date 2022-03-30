@@ -90,7 +90,7 @@ if ($generatedSignature !== $headerSignature) {
 	    								  fecha='".date('Y-m-d')."', 
 	    								  hora='".date('H:i:s')."',
 	    								  peticion='".json_encode($requestBody, JSON_PRETTY_PRINT)."',
-	    								  tipo='CREAR CLIENTE',
+	    								  tipo='Crear cliente',
 	    								  resultado='".json_encode($result, JSON_PRETTY_PRINT)."'");
 					
 	}

@@ -116,6 +116,6 @@ if ($generatedSignature !== $headerSignature) {
 	    								  fecha='".date('Y-m-d')."', 
 	    								  hora='".date('H:i:s')."',
 	    								  peticion='".json_encode($requestBody, JSON_PRETTY_PRINT)."',
-	    								  tipo='ACTUALIZAR PRODUCTO',
+	    								  tipo='Actualizar producto',
 	    								  resultado='".json_encode($result, JSON_PRETTY_PRINT)."'");
 }
