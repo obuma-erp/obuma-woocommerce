@@ -30,6 +30,7 @@ delete_option('cambiar_a_completado');
 delete_option('sincronizar_precio');
 delete_option('update_comunas_date');
 delete_option('update_limpiar_registros_date');
+delete_option('obuma_plugin_version');
 
 
 
@@ -56,7 +57,7 @@ delete_site_option('cambiar_a_completado');
 delete_site_option('sincronizar_precio');
 delete_site_option('update_comunas_date');
 delete_site_option('update_limpiar_registros_date');
-
+delete_site_option('obuma_plugin_version');
 
 
 $wpdb->query($wpdb->prepare("DELETE FROM ".$wpdb->prefix."postmeta WHERE meta_key=%s OR meta_key=%s OR meta_key=%s OR meta_key=%s",'order_obuma_rut','order_obuma_tipo_documento','order_obuma_giro_comercial','obuma_url_pdf'));

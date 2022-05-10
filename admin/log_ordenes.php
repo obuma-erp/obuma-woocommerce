@@ -121,6 +121,7 @@ function get_sortable_columns(){
 }  
 function my_render_list_page(){
   $myListTable = new LogOrdenTable();
+  echo check_version();
   echo '<div class="wrap"><h2>LOG DE &Oacute;RDENES</h2>'; 
   $myListTable->prepare_items(); 
   echo '<form method="GET">

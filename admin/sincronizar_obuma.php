@@ -1,5 +1,6 @@
 
-<hr>
+<?php echo check_version(); ?>
+
 <div class="panel panel-info" style="height: auto;">
 <div class="panel-heading bg-white">
   <?php _e('Panel de Sincronización con la API de OBUMA','obuma') ?>

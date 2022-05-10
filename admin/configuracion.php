@@ -4,7 +4,6 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 ?>
 
-<hr>
 
 <style type="text/css">
 	.form-table td{
@@ -12,6 +11,10 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 		padding-right: 0px;
 	}
 </style>
+
+<?php echo check_version(); ?>
+
+
 <div class="panel panel-info">
 <div class="panel-heading bg-white">
 	<?php _e('VARIABLES DE CONFIGURACI&Oacute;N DE OBUMA', 'obuma') ?>

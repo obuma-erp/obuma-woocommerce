@@ -76,6 +76,7 @@ function activar(){
     add_option('update_comunas_date',"","",'yes');
     add_option('update_limpiar_registros_date',"","",'yes');
     
+    add_option('obuma_plugin_version',"1.0.1","",'yes');
 }
 
 

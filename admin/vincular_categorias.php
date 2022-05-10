@@ -38,6 +38,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
     }
 ?>
 
+<?php echo check_version(); ?>
 
 <div class="wrap">
 	<h1 class="wp-heading-inline"> Vincular categorías con OBUMA </h1>

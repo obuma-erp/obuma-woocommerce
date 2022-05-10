@@ -289,3 +289,29 @@ function set_comunas(){
 
 
 }
+
+
+function check_version(){
+
+    $response = file_get_contents("https://obuma-cl.s3.us-east-2.amazonaws.com/cdn-utiles/versions_plugin_woocommerce.json");
+
+    $response_decode = json_decode($response,true);
+
+    $result = false;
+    $html = "";
+    foreach ($response_decode as $key => $version) {
+        if($version["version"] > get_option("obuma_plugin_version")){
+            $result = true;
+            break;
+        }
+    }
+
+
+    if($result){
+        $html .= "<hr><div style='background-color:#dd8166;padding:10px;color:white;border-radius:2px;'>Hay una nueva versi&oacute;n disponible del plugin Obuma Sync !  <a target='__blank'  style='background-color:#bb4827;padding:5px;color:white;text-decoration:none;'href='https://github.com/obuma-erp/obuma-woocommerce'>Obtener la nueva versi&oacute;n</a></div><br>";
+    }else{
+        $html .= "<hr>";
+    }
+
+    return $html;
+}
