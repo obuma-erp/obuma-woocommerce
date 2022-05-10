@@ -22,17 +22,17 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 	<div class="wrap">
 		<?php if (isset($_POST["config"])) {
 				
-				update_option('rut_empresa', $_POST["rut_empresa"]);
-				update_option('bodega', $_POST["bodega"]);
-				update_option('id_bodega', $_POST["id_bodega"]);
-				update_option('api_key', $_POST["api_key"]);
-				update_option('url_obuma',$_POST["url_obuma"]);
-				update_option('sucursal',$_POST["sucursal"]);
-    			update_option('vendedor',$_POST["vendedor"]);
-			    update_option('usuario',$_POST["usuario"]);
-			    update_option('canal_venta',$_POST["canal_venta"]);
-			    update_option('lista_precio',$_POST["lista_precio"]);
-			    update_option('codigo_forma_pago',$_POST["codigo_forma_pago"]);
+				update_option('rut_empresa', trim($_POST["rut_empresa"]));
+				update_option('bodega', trim($_POST["bodega"]));
+				update_option('id_bodega', trim($_POST["id_bodega"]));
+				update_option('api_key', trim($_POST["api_key"]));
+				update_option('url_obuma',trim($_POST["url_obuma"]));
+				update_option('sucursal',trim($_POST["sucursal"]));
+    			update_option('vendedor',trim($_POST["vendedor"]));
+			    update_option('usuario',trim($_POST["usuario"]));
+			    update_option('canal_venta',trim($_POST["canal_venta"]));
+			    update_option('lista_precio',trim($_POST["lista_precio"]));
+			    update_option('codigo_forma_pago',trim($_POST["codigo_forma_pago"]));
 
 			    update_option('rebajar_stock',$_POST["rebajar_stock"]);
 			    update_option('cliente_actualizar_datos',$_POST["cliente_actualizar_datos"]);

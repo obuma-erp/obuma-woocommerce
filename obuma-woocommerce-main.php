@@ -37,7 +37,7 @@ if (get_option("enviar_ventas_obuma") == 1) {
     add_action('woocommerce_admin_order_data_after_billing_address','admin_view_order_billing',10,4);
     add_action('woocommerce_order_details_after_order_table','oml_custom_checkout_field_display_admin_order_meta',10,4);
     add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields' );
-
+    add_action( 'woocommerce_checkout_create_order', 'save_custom_billingt_fields', 20, 2 );
     if (get_option("cambiar_a_completado") == 1) {
         add_action('woocommerce_payment_complete', 'change_to_completed');
     }
@@ -193,6 +193,15 @@ function custom_checkout_field($checkout){
 }
 
 
+function save_custom_billingt_fields( $order, $data ) {
+    if ( isset( $_POST['obuma_rut'] ) && ! empty( $_POST['obuma_rut'] ) ) {
+
+        $order->update_meta_data('obuma_rut',$_POST['obuma_rut']);
+        //update_post_meta( $order->get_id(), 'obuma_rut', $_POST['billing_obuma_rut']);
+    }
+
+}
+
 function call_order_status_changed($order_id,$old,$new){
     global $wpdb;
 
@@ -215,179 +224,221 @@ function call_order_status_changed($order_id,$old,$new){
             }else{
                 $data["giro_comercial"] = get_post_meta($id, '_billing_giro_comercial', true);
             }
+            
+            //update_post_meta( $id, 'obuma_rut', get_post_meta($id, 'obuma_rut', true));
+
+            $data["rut"] = get_post_meta($id, 'obuma_rut', true);
+
+
+
+            
+
+
+            if(esRut($data["rut"]) == false){
+
+                $order = wc_get_order($id);
+
+                $order->update_status('on-hold');
+
+                // The text for the note
+                $note = 'Esta orden no se pudo enviar a OBUMA porque el RUT del cliente es incorrecto';
+
+                // Add the note
+                $order->add_order_note( $note );
+
                 
-            $data["rut"] = get_post_meta($id, '_billing_rut', true);
+                $order->save();
 
-
-
-
-
-            if (get_option("nota_venta_segundo_plano") == 0) {
-                $data["tipo_documento"] = get_post_meta($id, '_billing_tipo_documento', true);
-            }elseif(get_option("nota_venta_segundo_plano") == 1){
-                $data["tipo_documento"] = 4;
+                
             }else{
-                if(get_post_meta($id, '_billing_tipo_documento', true) == 33){
-                      $data["tipo_documento"] = 4;
+
+                if (get_option("nota_venta_segundo_plano") == 0) {
+
+                    $data["tipo_documento"] = get_post_meta($id, '_billing_tipo_documento', true);
+
+                }elseif(get_option("nota_venta_segundo_plano") == 1){
+
+                    $data["tipo_documento"] = 4;
+
                 }else{
-                     $data["tipo_documento"] = get_post_meta($id, '_billing_tipo_documento', true);
+
+                    if(get_post_meta($id, '_billing_tipo_documento', true) == 33){
+
+                          $data["tipo_documento"] = 4;
+
+                    }else{
+
+                         $data["tipo_documento"] = get_post_meta($id, '_billing_tipo_documento', true);
+                         
+                    }
                 }
-            }
             
 
 
 
 
-            //$data["tipo_documento"] = 4;
-            $data["email"] = get_post_meta($id, '_billing_email', true);
-            $data["telefono"] = get_post_meta($id, '_billing_phone', true);
+                //$data["tipo_documento"] = 4;
+                $data["email"] = get_post_meta($id, '_billing_email', true);
+                $data["telefono"] = get_post_meta($id, '_billing_phone', true);
 
-            if(get_post_meta($id, '_billing_tipo_documento', true) == "39"){
-                $data["razon_social"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
-            }else{
-                if(empty(trim(get_post_meta($id, '_billing_company', true)))){
+                if(get_post_meta($id, '_billing_tipo_documento', true) == "39"){
                     $data["razon_social"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
-
                 }else{
-                    $data["razon_social"] = get_post_meta($id, '_billing_company', true);
+                    if(empty(trim(get_post_meta($id, '_billing_company', true)))){
+                        $data["razon_social"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
+
+                    }else{
+                        $data["razon_social"] = get_post_meta($id, '_billing_company', true);
+                    }
                 }
-            }
                 
             
-            $data["contacto"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
+                $data["contacto"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
 
-            $data["direccion"] = get_post_meta($id, '_billing_address_1', true) . " - " . get_post_meta($id, '_billing_address_2', true);
+                $data["direccion"] = get_post_meta($id, '_billing_address_1', true) . " - " . get_post_meta($id, '_billing_address_2', true);
 
-            $data_comuna = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."obuma_comunas WHERE pg_comuna_codigo_chilexpress='".get_post_meta($id, '_billing_state', true)."'");
-            
-
-            if (isset($data_comuna[0]->pg_comuna_id)) {
-                $data["comuna"] =  $data_comuna[0]->pg_comuna_id;
-                $data["region"] = $data_comuna[0]->rel_pg_region_id;
-            }else{
-                $data["comuna"] = "";
-                $data["region"] = "";
-            }
-
-
-            $customer_note = $order->get_customer_note();
-            // decode entity to regular HTML
-            $customer_note = html_entity_decode($customer_note);
-
-
-            $data["observacion"] =  $customer_note;
-            $data["sucursal"] = get_option("sucursal");
-            $data["bodega"] = get_option("bodega");
-            $data["usuario"] = get_option("usuario");
-            $data["canal_venta"] = get_option("canal_venta");
-            $data["vendedor"] = get_option("vendedor");
-            $data["lista_precio"] = get_option("lista_precio");
-            $data["rebajar_stock"] = get_option("rebajar_stock");
-            $data["registrar_contabilidad"] = get_option("registrar_contabilidad");
-            $data["enviar_email_cliente"] = get_option("enviar_email_cliente");
-            $data["registrar_cobro"] = get_option("registrar_cobro");
-            $data["cliente_actualizar_datos"] = get_option("cliente_actualizar_datos");
-
-            $payment_method = $order->get_payment_method_title();
-
-            $forma_pago_ = explode('#', $payment_method);
-            
-            if (isset($forma_pago_[1])) {
-
-                $venta_forma_pago = $forma_pago_[1];
+                $data_comuna = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."obuma_comunas WHERE pg_comuna_codigo_chilexpress='".get_post_meta($id, '_billing_state', true)."'");
                 
-            }else{
 
-                $venta_forma_pago = get_option("codigo_forma_pago");
-
-            }
-            
-
-            $data["forma_pago"] = $venta_forma_pago;
-            $data["total_neto"] = ($order->get_total() / 1.19);
-
-            if(get_option("registrar_cobro") == 1){
-                    $data["total_pagado"] = $order->get_total();
-                    $data["total_por_pagar"] = 0;
-            }else{
-                    $data["total_pagado"] = 0;
-                    $data["total_por_pagar"] = $order->get_total();
-            }
-
-            if ($data["tipo_documento"] != "39") {
-                $data["subtotal"] = ($order->get_total() / 1.19);
-            }else{
-                $data["subtotal"] = $order->get_total();
-            }
-               
-            $data["total_envio"] = $order->get_total_shipping();
-            $data["total"] = $order->get_total();
-            //Total incluido el envio $order->get_total();
-            $indice = 0;
-            foreach ($productos_orden as $item) {
-                $producto = wc_get_product($item->get_product_id());
-                if ($data["tipo_documento"] != "39") {
-                    $data["orden_detalle"][$indice]["precio"] = ($order->get_item_total($item) / 1.19);
-                    $data["orden_detalle"][$indice]["subtotal"] = ($order->get_line_total($item) /1.19);
-
+                if (isset($data_comuna[0]->pg_comuna_id)) {
+                    $data["comuna"] =  $data_comuna[0]->pg_comuna_id;
+                    $data["region"] = $data_comuna[0]->rel_pg_region_id;
                 }else{
-                    $data["orden_detalle"][$indice]["precio"] = $order->get_item_total($item);
-                    $data["orden_detalle"][$indice]["subtotal"] = $order->get_line_total($item);
+                    $data["comuna"] = "";
+                    $data["region"] = "";
                 }
 
-                $data["orden_detalle"][$indice]["codigo_comercial"] = $producto->get_sku();
-                $data["orden_detalle"][$indice]["nombre"] = $item['name'];
-                $data["orden_detalle"][$indice]["cantidad"] = $item['qty'];
+
+                $customer_note = $order->get_customer_note();
+                // decode entity to regular HTML
+                $customer_note = html_entity_decode($customer_note);
+
+
+                $data["observacion"] =  $customer_note;
+                $data["sucursal"] = get_option("sucursal");
+                $data["bodega"] = get_option("bodega");
+                $data["usuario"] = get_option("usuario");
+                $data["canal_venta"] = get_option("canal_venta");
+                $data["vendedor"] = get_option("vendedor");
+                $data["lista_precio"] = get_option("lista_precio");
+                $data["rebajar_stock"] = get_option("rebajar_stock");
+                $data["registrar_contabilidad"] = get_option("registrar_contabilidad");
+                $data["enviar_email_cliente"] = get_option("enviar_email_cliente");
+                $data["registrar_cobro"] = get_option("registrar_cobro");
+                $data["cliente_actualizar_datos"] = get_option("cliente_actualizar_datos");
+
+                $payment_method = $order->get_payment_method_title();
+
+                $forma_pago_ = explode('#', $payment_method);
+                
+                if (isset($forma_pago_[1])) {
+
+                    $venta_forma_pago = $forma_pago_[1];
                     
-                $indice++;
+                }else{
 
-            }
+                    $venta_forma_pago = get_option("codigo_forma_pago");
 
-            $data["orden_detalle"][$indice]["codigo_comercial"] = 'envio';
-            $data["orden_detalle"][$indice]["nombre"] = empty(trim($order->get_shipping_method())) ? 'envio' : $order->get_shipping_method();
-            $data["orden_detalle"][$indice]["cantidad"] = 1;
+                }
+            
 
-            if ($data["tipo_documento"] != "39") {
-                $data["orden_detalle"][$indice]["precio"] = ($order->get_total_shipping()  / 1.19);
-                $data["orden_detalle"][$indice]["subtotal"] = ($order->get_total_shipping() / 1.19);
-            }else{
-                $data["orden_detalle"][$indice]["precio"] = $order->get_total_shipping();
-                $data["orden_detalle"][$indice]["subtotal"] = $order->get_total_shipping();
-            }
+                $data["forma_pago"] = $venta_forma_pago;
+                $data["total_neto"] = ($order->get_total() / 1.19);
+
+                if(get_option("registrar_cobro") == 1){
+                        $data["total_pagado"] = $order->get_total();
+                        $data["total_por_pagar"] = 0;
+                }else{
+                        $data["total_pagado"] = 0;
+                        $data["total_por_pagar"] = $order->get_total();
+                }
+
+                if ($data["tipo_documento"] != "39") {
+                    $data["subtotal"] = ($order->get_total() / 1.19);
+                }else{
+                    $data["subtotal"] = $order->get_total();
+                }
+                   
+                $data["total_envio"] = $order->get_total_shipping();
+                $data["total"] = $order->get_total();
+                //Total incluido el envio $order->get_total();
+                $indice = 0;
+                foreach ($productos_orden as $item) {
+                    $producto = wc_get_product($item->get_product_id());
+                    if ($data["tipo_documento"] != "39") {
+                        $data["orden_detalle"][$indice]["precio"] = ($order->get_item_total($item) / 1.19);
+                        $data["orden_detalle"][$indice]["subtotal"] = ($order->get_line_total($item) /1.19);
+
+                    }else{
+                        $data["orden_detalle"][$indice]["precio"] = $order->get_item_total($item);
+                        $data["orden_detalle"][$indice]["subtotal"] = $order->get_line_total($item);
+                    }
+
+                    $data["orden_detalle"][$indice]["codigo_comercial"] = $producto->get_sku();
+                    $data["orden_detalle"][$indice]["nombre"] = $item['name'];
+                    $data["orden_detalle"][$indice]["cantidad"] = $item['qty'];
+                        
+                    $indice++;
+
+                }
+
+                $data["orden_detalle"][$indice]["codigo_comercial"] = 'envio';
+                $data["orden_detalle"][$indice]["nombre"] = empty(trim($order->get_shipping_method())) ? 'envio' : $order->get_shipping_method();
+                $data["orden_detalle"][$indice]["cantidad"] = 1;
+
+                if ($data["tipo_documento"] != "39") {
+                    $data["orden_detalle"][$indice]["precio"] = ($order->get_total_shipping()  / 1.19);
+                    $data["orden_detalle"][$indice]["subtotal"] = ($order->get_total_shipping() / 1.19);
+                }else{
+                    $data["orden_detalle"][$indice]["precio"] = $order->get_total_shipping();
+                    $data["orden_detalle"][$indice]["subtotal"] = $order->get_total_shipping();
+                }
                 
 
             
         
-            $response = enviar_orden_venta($data);
+                $response = enviar_orden_venta($data);
 
 
-            $datos_log  = array('data' => $response["peticion"], "response" => $response["respuesta"],"estado" => strtolower($new));
-            insert_order_obuma_log($datos_log,$order_id);
+                $datos_log  = array('data' => $response["peticion"], "response" => $response["respuesta"],"estado" => strtolower($new));
+                insert_order_obuma_log($datos_log,$order_id);
 
-            if(isset($response["respuesta"]->result->result_dte[0]->dte_id)){
-             
+                if(isset($response["respuesta"]->result->result_dte[0]->dte_id)){
+                 
 
-                update_post_meta( $data["orden_id"], 'obuma_url_pdf', $response["respuesta"]->result->result_dte[0]->dte_pdf );
+                    update_post_meta( $data["orden_id"], 'obuma_url_pdf', $response["respuesta"]->result->result_dte[0]->dte_pdf );
 
-                insert_order_obuma(
-                        array('order_woocommerce_id' => $order_id,
-                              'dte_id' => $response["respuesta"]->result->result_dte[0]->dte_id,
-                              'dte_tipo' => $response["respuesta"]->result->result_dte[0]->dte_tipo,
-                              'dte_folio' => $response["respuesta"]->result->result_dte[0]->dte_folio,
-                              'dte_result' => $response["respuesta"]->result->result_dte[0]->dte_result,
-                              'dte_xml' => $response["respuesta"]->result->result_dte[0]->dte_xml,
-                              'dte_pdf' => $response["respuesta"]->result->result_dte[0]->dte_pdf
-                                )
-                );
+                    insert_order_obuma(
+                            array('order_woocommerce_id' => $order_id,
+                                  'dte_id' => $response["respuesta"]->result->result_dte[0]->dte_id,
+                                  'dte_tipo' => $response["respuesta"]->result->result_dte[0]->dte_tipo,
+                                  'dte_folio' => $response["respuesta"]->result->result_dte[0]->dte_folio,
+                                  'dte_result' => $response["respuesta"]->result->result_dte[0]->dte_result,
+                                  'dte_xml' => $response["respuesta"]->result->result_dte[0]->dte_xml,
+                                  'dte_pdf' => $response["respuesta"]->result->result_dte[0]->dte_pdf
+                                    )
+                    );
 
 
-            }else{
+                }else{
 
-                    $order = wc_get_order($data["orden_id"]);
-                    $order->update_status('on-hold');
+                        $order = wc_get_order($data["orden_id"]);
 
-                    
+                        $order->update_status('on-hold');
+
+                        $note = 'Esta orden no se pudo enviar a OBUMA porque no hay folios disponibles';
+
+                        // Add the note
+                        $order->add_order_note( $note );
+
+                        $order->save();
+                        
+                }
             }
+
+
+
+            
 
             }else{
                 $datos_log  = array('data' => [], "response" => [],"estado" => strtolower($new));
@@ -421,7 +472,7 @@ function billing_vat_field_process() {
 function custom_override_checkout_fields($fields){
 
 
-    $fields['billing']['billing_rut'] = array(
+    $fields['billing']['obuma_rut'] = array(
     'label'     => __('RUT', 'woocommerce'),
     'placeholder'   => _x('RUT', 'placeholder', 'woocommerce'),
     'required'  => true,
@@ -475,8 +526,8 @@ function custom_override_checkout_fields($fields){
 
 function admin_view_order_billing($order){
 
-    if(!empty(get_post_meta( $order->get_id(), '_billing_rut', true ))){
-        echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . get_post_meta( $order->get_id(), '_billing_rut', true ) . '</p>';
+    if(!empty(get_post_meta( $order->get_id(), 'obuma_rut', true ))){
+        echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . get_post_meta( $order->get_id(), 'obuma_rut', true ) . '</p>';
     }
     
     if(!empty(get_post_meta( $order->get_id(), '_billing_giro_comercial', true ))){
@@ -512,7 +563,7 @@ function oml_custom_checkout_field_display_admin_order_meta($order){
     echo "<tbody>";
     echo '<tr class="woocommerce-table__line-item order_item">';
     echo '<th scope="row">'.__('R.U.T.').'</th>';
-    echo '<td><span class="woocommerce-Price-amount amount">'. get_post_meta($order->get_id(),'_billing_rut', true ) . '</span></td>';
+    echo '<td><span class="woocommerce-Price-amount amount">'. get_post_meta($order->get_id(),'obuma_rut', true ) . '</span></td>';
     echo '</tr>';
     echo '<tr>';
     echo '<th scope="row">'.__('Giro comercial').'</th>';
