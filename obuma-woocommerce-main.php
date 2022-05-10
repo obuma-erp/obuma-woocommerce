@@ -230,10 +230,6 @@ function call_order_status_changed($order_id,$old,$new){
             $data["rut"] = get_post_meta($id, 'obuma_rut', true);
 
 
-
-            
-
-
             if(esRut($data["rut"]) == false){
 
                 $order = wc_get_order($id);
