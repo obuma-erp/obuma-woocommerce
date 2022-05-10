@@ -526,10 +526,15 @@ function custom_override_checkout_fields($fields){
 
 function admin_view_order_billing($order){
 
-    if(!empty(get_post_meta( $order->get_id(), 'obuma_rut', true ))){
-        echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . get_post_meta( $order->get_id(), 'obuma_rut', true ) . '</p>';
+    $_billing_rut_obuma = get_post_meta($order->get_id(),'_billing_rut', true );
+
+    if(!isset($_billing_rut_obuma) || empty($_billing_rut_obuma)){
+         echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . get_post_meta( $order->get_id(), 'obuma_rut', true ) . '</p>';
+    }else{
+         echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . get_post_meta( $order->get_id(), '_billing_rut', true ) . '</p>';
     }
-    
+
+
     if(!empty(get_post_meta( $order->get_id(), '_billing_giro_comercial', true ))){
         echo '<p><strong style="display:flex;">'.__('Giro comercial').':</strong> ' . get_post_meta( $order->get_id(), '_billing_giro_comercial', true ) . '</p>';
     }
