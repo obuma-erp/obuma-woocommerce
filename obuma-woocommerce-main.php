@@ -73,6 +73,8 @@ function activar(){
     add_option('cambiar_a_completado',0,'','yes');
     add_option('sincronizar_precio',0,'','yes');
 
+    add_option('seleccionar_taxonomias',"","",'yes');
+
     add_option('update_comunas_date',"","",'yes');
     add_option('update_limpiar_registros_date',"","",'yes');
     
@@ -231,23 +233,8 @@ function call_order_status_changed($order_id,$old,$new){
             $data["rut"] = get_post_meta($id, 'obuma_rut', true);
 
 
-            if(esRut($data["rut"]) == false){
 
-                $order = wc_get_order($id);
 
-                $order->update_status('on-hold');
-
-                // The text for the note
-                $note = 'Esta orden no se pudo enviar a OBUMA porque el RUT del cliente es incorrecto';
-
-                // Add the note
-                $order->add_order_note( $note );
-
-                
-                $order->save();
-
-                
-            }else{
 
                 if (get_option("nota_venta_segundo_plano") == 0) {
 
@@ -419,19 +406,39 @@ function call_order_status_changed($order_id,$old,$new){
 
                 }else{
 
-                        $order = wc_get_order($data["orden_id"]);
 
-                        $order->update_status('on-hold');
+                    if(isset($response["respuesta"]->errors)){
 
-                        $note = 'Esta orden no se pudo enviar a OBUMA porque no hay folios disponibles';
+                        foreach ($response["respuesta"]->errors as $key => $error) {
 
-                        // Add the note
-                        $order->add_order_note( $note );
+                            
+                            $order = wc_get_order($data["orden_id"]);
 
-                        $order->save();
+                            $order->update_status('on-hold');
+
+                            $note = 'La orden no fue registrada en OBUMA : '. $error->message;
+
+                            if($error->code == 111){
+                                $note = 'El RUT enviado a OBUMA es incorrecto!';
+                            }
+
+
+                            if($error->code == 112){
+
+                                $note = 'No hay folios disponibles en OBUMA!';
+                            }
+                            
+
+                            $order->add_order_note( $note );
+
+                            $order->save();
+
+                        }
+                    }
+
                         
                 }
-            }
+            
 
 
 

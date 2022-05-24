@@ -190,7 +190,7 @@ function esRut($r = false){
 function existe_categoria_vincular($producto_categoria){
     global $wpdb;
     $result = false;
-    $categoria_existe = $wpdb->get_results("SELECT t.term_id FROM  ".$wpdb->prefix."terms t INNER JOIN ".$wpdb->prefix."term_taxonomy tt ON t.term_id=tt.term_id INNER JOIN  ".$wpdb->prefix."obuma_vincular_categorias vco ON t.term_id = vco.categoria_woocommerce_id  WHERE tt.taxonomy='product_cat'  AND vco.obuma_id_category > 0 AND vco.obuma_id_category = '".$producto_categoria."'");
+    $categoria_existe = $wpdb->get_results("SELECT t.term_id,vco.woocommerce_taxonomy FROM  ".$wpdb->prefix."terms t INNER JOIN ".$wpdb->prefix."term_taxonomy tt ON t.term_id=tt.term_id INNER JOIN  ".$wpdb->prefix."obuma_vincular_categorias vco ON t.term_id = vco.categoria_woocommerce_id  WHERE vco.obuma_id_category > 0 AND vco.obuma_id_category = '".$producto_categoria."'");
 
     if (count($categoria_existe) > 0) {
         $result = $categoria_existe;
@@ -243,6 +243,34 @@ function existe_cliente($cliente_email){
     
     return $result;
 }
+
+
+function obtenerTaxonomia($term_id){
+    global $wpdb;
+    
+    $result = false;
+    $existe_taxonomia = $wpdb->get_results("SELECT taxonomy FROM ".$wpdb->prefix."term_taxonomy WHERE term_id='".$term_id."' LIMIT 1",ARRAY_A);
+
+    if (count($existe_taxonomia) == 1) {
+        $result = $existe_taxonomia[0]["taxonomy"];
+    }
+
+     return $result;
+}
+
+function getObumaIdCategory($term_id){
+    global $wpdb;
+    $result = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."obuma_vincular_categorias WHERE categoria_woocommerce_id='".$term_id."' LIMIT 1",ARRAY_A);
+    return $result;
+}
+
+function vinculadas($taxonomy){
+    global $wpdb;
+    $result = $wpdb->get_results("SELECT * FROM  ".$wpdb->prefix."terms t INNER JOIN ".$wpdb->prefix."term_taxonomy tt ON t.term_id=tt.term_id INNER JOIN  ".$wpdb->prefix."obuma_vincular_categorias vco ON t.term_id = vco.categoria_woocommerce_id  WHERE tt.taxonomy='".$taxonomy."'  AND vco.obuma_id_category > 0");
+    return count($result);
+}
+
+
 
 function set_comunas(){
 

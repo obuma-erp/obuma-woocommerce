@@ -66,7 +66,7 @@ if($cantidad_paginas > 0){
 					$categoria_existe = existe_categoria_vincular($producto_categoria);
 
 					if ($categoria_existe !== false) {
-						wp_set_object_terms((int)$existe[0]->ID, (int)$categoria_existe[0]->term_id , 'product_cat',false);
+						wp_set_object_terms((int)$existe[0]->ID, (int)$categoria_existe[0]->term_id ,$categoria_existe[0]->woocommerce_taxonomy,false);
 					}else{
 						$categoria_no_definida = existe_sin_categorizar();
 						if ($categoria_no_definida !== false) {
@@ -118,7 +118,7 @@ if($cantidad_paginas > 0){
 					
 					$categoria_existe = existe_categoria_vincular($producto_categoria);
 					if ($categoria_existe !== false) {
-						wp_set_object_terms((int)$post_id, (int)$categoria_existe[0]->term_id , 'product_cat',false);
+						wp_set_object_terms((int)$post_id, (int)$categoria_existe[0]->term_id , $categoria_existe[0]->woocommerce_taxonomy,false);
 					}else{
 						$categoria_no_definida = existe_sin_categorizar();
 						if ($categoria_no_definida !== false) {

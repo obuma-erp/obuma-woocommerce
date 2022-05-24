@@ -57,6 +57,8 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 			    update_option('enviar_ventas_obuma',$_POST["enviar_ventas_obuma"]);
 			    update_option('cambiar_a_completado',$_POST["cambiar_a_completado"]);
 			    update_option('sincronizar_precio',$_POST["sincronizar_precio"]);
+			    update_option('seleccionar_taxonomias',trim(trim($_POST["seleccionar_taxonomias"]),","));
+
 
 				echo '<div id="message" class="notice notice-success"><p><strong>Todos los datos fueron guardados.</strong></p></div>';
 				} 
@@ -78,7 +80,9 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 				<tr class="form-field form-required">
 					<th><label>API KEY</label></th>
 					<td width="40%;">
-			<input type="password" name="api_key"  class="form-control" id="api_key" placeholder="Ingrese API KEY" required  value="<?php echo get_option("api_key"); ?>"></td>
+			<input type="password" name="api_key"  class="form-control" id="api_key" placeholder="Ingrese API KEY" required  value="<?php echo get_option("api_key"); ?>">
+<em style='color:#e74c3c;font-size: 0.8em;'>El API KEY es una clave &uacute;nica proporcionada por OBUMA, si a&uacute;n no la tiene, solic&iacute;tela a soporte@obuma.cl</em>
+		</td>
 				</tr>
 
 				<tr class="form-field form-required">
@@ -93,7 +97,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 					<th><label>SUCURSAL</label></th>
 					<td width="40%;">
 				<input type="text" name="sucursal" class="form-control" id="sucursal" placeholder="Ingrese el c&oacute;digo de la sucursal" value="<?php echo get_option("sucursal"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la sucursal que desea vincular a las ventas por woocommerce</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la sucursal que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
 
 				</td>
 				</tr>
@@ -102,12 +106,12 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 					<th><label>BODEGA</label></th>
 					<td width="40%;">
 				<input type="text" name="bodega" class="form-control" id="bodega" placeholder="Ingrese el c&oacute;digo de la bodega" value="<?php echo get_option("bodega"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la bodega que desea vincular a las ventas por woocommerce</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la bodega que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
 
 				</td>
 				<td width="40%;">
 					<input type="text" name="id_bodega" class="form-control" id="id_bodega" placeholder="Ingrese el id bodega" value="<?php echo get_option("id_bodega"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>ID de la bodega</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>ID de la bodega (Este valor se obtiene en OBUMA)</em>
 				</td>
 				</tr>
 
@@ -116,7 +120,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 					<th><label>VENDEDOR</label></th>
 					<td width="40%;">
 				<input type="text" name="vendedor" class="form-control" id="vendedor" placeholder="Ingrese el c&oacute;digo del vendedor" value="<?php echo get_option("vendedor"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del vendedor que desea vincular a las ventas por woocommerce</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del vendedor que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
 
 			</td>
 				</tr>
@@ -126,7 +130,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 					<th><label>USUARIO</label></th>
 					<td width="40%;">
 				<input type="text" name="usuario"  class="form-control" id="usuario" placeholder="Ingrese el c&oacute;digo del usuario" value="<?php echo get_option("usuario"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del usuario que desea vincular a las ventas por woocommerce</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del usuario que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
 
 				</td>
 				</tr>
@@ -137,7 +141,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 					<th><label>CANAL DE VENTA</label></th>
 					<td width="40%;">
 				<input type="text" name="canal_venta"  class="form-control" id="canal_venta" placeholder="Ingrese el codigo del canal de venta" value="<?php echo get_option("canal_venta"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del canal de venta que desea vincular a las ventas por woocommerce</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del canal de venta que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
 
 				</td>
 				</tr>
@@ -147,7 +151,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 					<th><label>LISTA PRECIO</label></th>
 					<td width="40%;">
 				<input type="text" name="lista_precio" class="form-control" id="lista_precio" placeholder="Ingrese el c&oacute;digo de la lista de precio" value="<?php echo get_option("lista_precio"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la lista de precio que desea vincular a las ventas por woocommerce</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la lista de precio que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
 
 				</td>
 				</tr>
@@ -156,7 +160,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 					<th><label>CÓDIGO FORMA DE PAGO</label></th>
 					<td width="40%;">
 				<input type="text" name="codigo_forma_pago" class="form-control" id="codigo_forma_pago" placeholder="Ingrese el c&oacute;digo de la forma de pago" value="<?php echo get_option("codigo_forma_pago"); ?>">
-				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la forma de pago que desea vincular a las ventas por woocommerce</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la forma de pago que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
 
 				</td>
 				</tr>
@@ -267,6 +271,19 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 			</td>
 				</tr>
+
+<tr class="form-field form-required">
+					<th><label>ELEGIR TAXONOM&Iacute;AS</label></th>
+					<td>
+					
+					<input type="text" name="seleccionar_taxonomias" placeholder="Ingresar taxonomias" value="<?php echo get_option("seleccionar_taxonomias"); ?>">
+				<br>
+				<em style='color:#e74c3c;font-size: 0.8em;'>Permite elegir las taxonom&iacute;as para la sincronizaci&oacute;n de productos (Por defecto product_cat), si se quiere seleccionar m&aacute;s de una taxonom&iacute;a se deben separar por comas Ej : (product_cat,taxonomia2,taxonomia3)</em>
+				
+
+			</td>
+				</tr>
+
 
 <tr class="form-field form-required">
 					<th><label>Sincronizar Comunas</label></th>

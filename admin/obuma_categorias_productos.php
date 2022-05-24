@@ -44,9 +44,26 @@ if(isset($data_categorias)){
 
 			if($categoria_existe !== false){
 
-				$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."terms SET name=%s WHERE term_id=%d",trim($data["producto_categoria_nombre"]),$categoria_existe[0]->term_id));
 
-				$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."term_taxonomy SET description=%s WHERE term_id=%d",$data["producto_categoria_descripcion"],$categoria_existe[0]->term_id));
+				$taxonomia_a_usar = 'product_cat';
+
+				$obtener_taxonomia_actual = obtenerTaxonomia($categoria_existe[0]->term_id);
+
+				if($obtener_taxonomia_actual != false){
+					$taxonomia_a_usar = $obtener_taxonomia_actual;
+				}
+
+				$term_data = wp_update_term(
+	    			
+	    			(int)$categoria_existe[0]->term_id,
+	    			$taxonomia_a_usar,
+	   			 array( // (optional)
+	   			 	'name'=> 'sasas', // (optional)
+			        'description'=> 'abc', // (optional)
+			        'slug' => trim($data["producto_categoria_nombre"])
+	    		)
+				);
+
 
 				$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."terms SET obuma_id_category=%d WHERE term_id=%d",$data["producto_categoria_id"],$categoria_existe[0]->term_id));
 
@@ -54,6 +71,8 @@ if(isset($data_categorias)){
 				$resumen["resumen"][$indice]["name"] = $categoria_existe[0]->name;
 				$resumen["resumen"][$indice]["action"] = "actualizado";
 				$indice++;
+
+
 			}else{
 
 				$term_data = wp_insert_term(
