@@ -42,7 +42,7 @@ $log_synchronization_result = "";
 			$cliente_id = $data["cliente_id"];
 			$cliente_razon_social = trim($data["cliente_razon_social"]);
 			$cliente_email = trim($data["cliente_email"]);
-
+			$rel_empresa_id = $data["rel_empresa_id"];
 
 			if(!empty($cliente_razon_social) && is_valid_email($cliente_email)){
 
@@ -62,7 +62,7 @@ $log_synchronization_result = "";
 					
 				}else{
 
-					$user_id = wc_create_new_customer($cliente_email);
+					$user_id = wc_create_new_customer($cliente_email,"","Woo_i".$cliente_id."_i".$rel_empresa_id);
 					if (!is_wp_error($user_id)) {
 
 						$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."users SET obuma_id_customer=%d WHERE ID=%d",$cliente_id,$user_id));
