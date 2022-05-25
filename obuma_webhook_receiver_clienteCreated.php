@@ -49,50 +49,49 @@ if ($generatedSignature !== $headerSignature) {
 	$cliente_id = $data["cliente_id"];
 	$cliente_razon_social = trim($data["cliente_razon_social"]);
 	$cliente_email = trim($data["cliente_email"]);
+	$rel_empresa_id = $data["rel_empresa_id"];
 
-	if (empty($cliente_razon_social)  || $cliente_razon_social == "-") {
-		$cliente_razon_social = "empty".$contador;
-	}
-	if (empty($cliente_email) || $cliente_email == "-") {
-		$cliente_email = "no-mail".$contador."@gmail.com";
-	}
+	if(!empty($cliente_razon_social) && is_valid_email($cliente_email)){
 
-	$user_id = wc_create_new_customer($cliente_email);
+		$user_id = wc_create_new_customer($cliente_email,"","Woo_i".$cliente_id."_i".$rel_empresa_id);
 
-	if (!is_wp_error($user_id)) {
+		if (!is_wp_error($user_id)) {
 
-		$result = [];
-		
-		try{
+			$result = [];
+			
+			try{
 
-			$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."users SET obuma_id_customer=%d WHERE ID=%d",$cliente_id,$user_id));
+				$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."users SET obuma_id_customer=%d WHERE ID=%d",$cliente_id,$user_id));
 
-			update_user_meta($user_id,"first_name",$cliente_razon_social);
-			update_user_meta($user_id,"last_name","");
+				update_user_meta($user_id,"first_name",$cliente_razon_social);
+				update_user_meta($user_id,"last_name","");
 
-    		$result[]["message"] = "Success";
-			$result[]["cliente_email"] = $cliente_email;
-			$result[]["cliente_id"] = $cliente_id;
-
-			} catch (Exception $e) {
-
-				$result[]["message"] = $e->getMessage();
-				$result[]["code"] = $e->getCode();
-				$result[]["file"] = $e->getFile();
+	    		$result[]["message"] = "Success";
 				$result[]["cliente_email"] = $cliente_email;
-				$result[]["cliente_id"] = $cliente_id; 
-			}
+				$result[]["cliente_id"] = $cliente_id;
+
+				} catch (Exception $e) {
+
+					$result[]["message"] = $e->getMessage();
+					$result[]["code"] = $e->getCode();
+					$result[]["file"] = $e->getFile();
+					$result[]["cliente_email"] = $cliente_email;
+					$result[]["cliente_id"] = $cliente_id; 
+				}
 
 
-			$table_obuma_log_webhook = $wpdb->prefix . 'obuma_log_webhook';
-	    	$wpdb->query("INSERT INTO {$table_obuma_log_webhook} 
-	    								  SET 
-	    								  fecha='".date('Y-m-d')."', 
-	    								  hora='".date('H:i:s')."',
-	    								  peticion='".json_encode($requestBody, JSON_PRETTY_PRINT)."',
-	    								  tipo='Crear cliente',
-	    								  resultado='".json_encode($result, JSON_PRETTY_PRINT)."'");
-					
+				$table_obuma_log_webhook = $wpdb->prefix . 'obuma_log_webhook';
+		    	$wpdb->query("INSERT INTO {$table_obuma_log_webhook} 
+		    								  SET 
+		    								  fecha='".date('Y-m-d')."', 
+		    								  hora='".date('H:i:s')."',
+		    								  peticion='".json_encode($requestBody, JSON_PRETTY_PRINT)."',
+		    								  tipo='Crear cliente',
+		    								  resultado='".json_encode($result, JSON_PRETTY_PRINT)."'");
+						
+		}
 	}
+
+
 
 }
