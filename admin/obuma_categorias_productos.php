@@ -58,8 +58,8 @@ if(isset($data_categorias)){
 	    			(int)$categoria_existe[0]->term_id,
 	    			$taxonomia_a_usar,
 	   			 array( // (optional)
-	   			 	'name'=> 'sasas', // (optional)
-			        'description'=> 'abc', // (optional)
+	   			 	'name'=> trim($data["producto_categoria_nombre"]), // (optional)
+			        'description'=> $data["producto_categoria_descripcion"], // (optional)
 			        'slug' => trim($data["producto_categoria_nombre"])
 	    		)
 				);
