@@ -22,7 +22,7 @@ if (isset($json->data[0]->empresa_id) && $json->data[0]->empresa_id > 0) {
  echo "</div>";
 }else{
  echo "<div class='alert alert-danger'>";
- echo "<strong>Hubo un error  al conectar con la API de Obuma,verifique el API KEY registrado en la configuraci&oacute;n del plugin . <a class='btn btn-primary' href='admin.php?page=obuma/admin/configuracion.php'>Ir a la configuraci&oacute;n</a></strong><br>";
+ echo "<strong>Hubo un error  al conectar con la API de Obuma,verifique el API KEY registrado en la configuraci&oacute;n del plugin . <a class='btn btn-primary' href='admin.php?page=configuracion'>Ir a la configuraci&oacute;n</a></strong><br>";
 
  echo "</div>";
 }
@@ -35,20 +35,20 @@ if (isset($json->data[0]->empresa_id) && $json->data[0]->empresa_id > 0) {
   <!-- List group -->
 
 <div class="list-group" id="myList" role="tablist">
-  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_clientes.php" data-pagina="clientes"  role="tab">
+  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_clientes" data-pagina="clientes"  role="tab">
   <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;  Clientes</a>
-  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_productos.php" data-pagina="productos" role="tab">
+  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_productos" data-pagina="productos" role="tab">
 <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 
   &nbsp; Productos
   </a>
-<a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_categorias_productos.php"  data-pagina="categorias_productos"  role="tab">
+<a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_categorias_productos"  data-pagina="categorias_productos"  role="tab">
   <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>&nbsp; Categorias de  Productos</a>
-  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_precios.php" data-pagina="precios" role="tab">
+  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_precios" data-pagina="precios" role="tab">
   <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>&nbsp;  Precios</a>
-  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_stock.php" data-pagina="stock" role="tab">
+  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_stock" data-pagina="stock" role="tab">
   <span class="glyphicon glyphicon-check" aria-hidden="true"></span>&nbsp;  Stock</a>
 
-  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_productos_imagenes.php" data-pagina="productos_imagenes" role="tab">
+  <a class="list-group-item list-group-item-action" data-toggle="list" href="obuma_productos_imagenes" data-pagina="productos_imagenes" role="tab">
   <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>&nbsp;  Imagenes de Productos</a>
 </div>
 

@@ -28,6 +28,8 @@ register_deactivation_hook(__FILE__,'desactivar');
 add_action("admin_enqueue_scripts","cargar_archivos");
 add_action("wp_enqueue_scripts","load_css_js_frontend");
 
+add_action( "wp_ajax_obuma_action", "so_wp_ajax_function" );
+
 if (get_option("enviar_ventas_obuma") == 1) {
 
     add_action('woocommerce_before_order_notes', 'custom_checkout_field');
@@ -100,19 +102,78 @@ function load_css_js_frontend($page){
 
 function cargar_archivos($page){
 
-    if ($page != "obuma-woocommerce-main/admin/sincronizar_obuma.php" && $page != "obuma-woocommerce-main/admin/configuracion.php") {
-        return;
+    if(isset($_GET["page"])){
+        if($_GET["page"] != "sincronizar" && $_GET["page"] != "configuracion" ){
+            return;
+        }
     }
 
     wp_register_script("obuma_js",plugins_url("/admin/js/obuma.js",__FILE__),array("jquery"));
+
     wp_register_style('obuma_bootstrap_css', plugins_url("/admin/css/bootstrap.min.css",__FILE__));
+
     wp_register_style('obuma_css', plugins_url("/admin/css/obuma.css",__FILE__));
     
     wp_enqueue_style('obuma_bootstrap_css');
+
     wp_enqueue_style('obuma_css');
+
     wp_enqueue_script("jquery");
+
     wp_enqueue_script("obuma_js");
     
+    wp_localize_script( 
+        'obuma_js', 
+        'ajax_object', 
+        array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) 
+    );
+
+}
+
+
+function so_wp_ajax_function(){
+    global $wpdb;
+    global $pagina;
+    require_once "admin/".$_POST["url"].".php";
+    die();
+}
+
+function load_configuracion(){
+
+    require_once "admin/configuracion.php";
+
+}
+
+function load_sincronizar(){
+
+    require_once "admin/sincronizar_obuma.php";
+
+}
+
+function load_vincular_categorias(){
+
+    global $wpdb;
+
+    require_once "admin/vincular_categorias.php";
+
+}
+
+function load_log_sincronizacion(){
+
+    require_once "admin/log_sincronizacion.php";
+
+}
+
+function load_log_ordenes(){
+
+    require_once "admin/log_ordenes.php";
+
+}
+
+function load_log_webhook(){
+
+    require_once "admin/log_webhook.php";
+
 }
 
 function custom_checkout_field($checkout){

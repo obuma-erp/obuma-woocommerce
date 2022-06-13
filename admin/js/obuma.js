@@ -40,9 +40,11 @@ jQuery(document).ready(function(){
   if (pagina == "productos_imagenes" || pagina == "precios" || pagina == "productos"  || pagina == "stock") {
     jQuery.ajax({
     method : "POST",
-    url : "../wp-content/plugins/obuma-woocommerce-main/admin/categorias.php",
+    url : ajax_object.ajaxurl,
     data : {
-      obtener : true
+      obtener : true,
+      action : 'obuma_action',
+      url :  "categorias"
     },
     beforeSend:function(response){
       jQuery("#cargar_vistas").html('<p class="centrar marTop" id="m">Sincronizando con la API <br>Por favor, espere ..</p><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>');
@@ -159,10 +161,13 @@ jQuery(document).ready(function(){
     var pagina = parseInt(numero_pagina) + 1;
     jQuery.ajax({
       method : "POST",
-      url : "../wp-content/plugins/obuma-woocommerce-main/admin/" + url,
+      url : ajax_object.ajaxurl,
       data : { 
         pagina : pagina,
-        categorias_seleccionadas : categorias_seleccionadas
+        categorias_seleccionadas : categorias_seleccionadas,
+        action : 'obuma_action',
+        url :  url
+
       },
       beforeSend:function(){
         if (pagina == 1) {
@@ -405,25 +410,28 @@ if(document.getElementById("sincronizar_comunas")){
   document.getElementById("sincronizar_comunas").addEventListener("click",function(){
   this.setAttribute("disabled","disabled")
 
-    fetch("../wp-content/plugins/obuma-woocommerce-main/admin/set_comunas.php", {
-      method: 'get'
-    }).then(function(response) {
-      return response.json();
-    }).then(function(response) {
 
+      jQuery.ajax({
+    method : "POST",
+    url : ajax_object.ajaxurl,
+    data : {
+      action : 'obuma_action',
+      url :  "set_comunas"
+    },
+    dataType : "json",
+    complete:function(response){
+      var result = response.responseJSON;
+       if(result.result == "true"){
+              document.getElementById("update_comunas_message").innerText = "Ultima sincronizacion : "
+              document.getElementById("update_comunas").innerText = result.date
+              document.getElementById("sincronizar_comunas").removeAttribute("disabled")
+       }
 
-      if(response.result == "true"){
-        document.getElementById("update_comunas_message").innerText = "Ultima sincronizacion : "
-        document.getElementById("update_comunas").innerText = response.date
-        document.getElementById("sincronizar_comunas").removeAttribute("disabled")
-      }
-      
-      
-      
+    }
 
-    }).catch(function(err) {
-      console.log(err);
     });
+
+
 
     
   })
@@ -435,25 +443,27 @@ if(document.getElementById("limpiar_registros")){
   document.getElementById("limpiar_registros").addEventListener("click",function(){
   this.setAttribute("disabled","disabled")
 
-    fetch("../wp-content/plugins/obuma-woocommerce-main/admin/limpiar_registros.php", {
-      method: 'get'
-    }).then(function(response) {
-      return response.json();
-    }).then(function(response) {
-
-
-      if(response.result == "true"){
+    jQuery.ajax({
+    method : "POST",
+    url : ajax_object.ajaxurl,
+    data : {
+      action : 'obuma_action',
+      url :  "limpiar_registros"
+    },
+    dataType : "json",
+    complete:function(response){
+      var result = response.responseJSON;
+      
+      if(result.result == "true"){
         document.getElementById("update_limpiar_registros_message").innerText = "Ultima Limpieza : "
-        document.getElementById("update_limpiar_registros").innerText = response.date
+        document.getElementById("update_limpiar_registros").innerText = result.date
         document.getElementById("limpiar_registros").removeAttribute("disabled")
       }
-      
-      
-      
 
-    }).catch(function(err) {
-      console.log(err);
+    }
+
     });
+
 
     
   })

@@ -1,5 +1,5 @@
 <?php
-require_once "../../../../wp-load.php";
+
 require_once "obuma_conector.php";
 require_once "functions.php";
 
@@ -16,6 +16,8 @@ $pagina = obtener_numero_pagina($_POST["pagina"]);
 
 $url = set_url()."productos.list.json";
 $json = verificar_categorias_seleccionadas($url,$_POST["categorias_seleccionadas"],"productos");
+
+
 
 $json = json_encode($json, true);
 $json = json_decode($json, true);

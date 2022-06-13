@@ -1,5 +1,5 @@
 <?php
-require_once "../../../../wp-load.php";
+
 require_once "obuma_conector.php";
 require_once "functions.php";
 require_once "Image.php";

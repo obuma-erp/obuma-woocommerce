@@ -1,5 +1,5 @@
 <?php
-require_once "../wp-load.php";
+
 require_once RAI_RUTA.'/admin/obuma-list-table.php'; 
 
 
