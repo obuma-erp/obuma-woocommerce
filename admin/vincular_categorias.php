@@ -10,6 +10,9 @@ require_once "functions.php";
 	$option_seleccionar_taxonomias = get_option("seleccionar_taxonomias");
 	$taxonomias_seleccionadas = empty(trim($option_seleccionar_taxonomias)) ? [$taxonomia_configurar] : explode(",",$option_seleccionar_taxonomias);
 
+	if(!in_array("product_cat", $taxonomias_seleccionadas)){
+		array_unshift($taxonomias_seleccionadas, "product_cat");
+	}
 	if(isset($_GET['option'])){
 		$taxonomia_configurar = $_GET['option'];
 		
@@ -50,7 +53,7 @@ require_once "functions.php";
 
 	<select onchange="window.location.href='?page=obuma_vincular_categorias&option='+this.value">
 	<?php foreach ($taxonomias_seleccionadas as $key => $ts) { ?>
-		echo "<option value='<?php echo $ts; ?>' <?php if(isset($_GET["option"])){if($_GET["option"] == $ts){echo "selected";}} ?>><?php echo $ts; ?></option>
+		echo "<option value='<?php echo $ts; ?>' <?php if(isset($_GET["option"])){if($_GET["option"] == $ts){echo "selected";}}else{if($ts == "product_cat"){echo "selected";}} ?>><?php echo $ts; ?></option>
 	<?php } ?>
 </select>
 
