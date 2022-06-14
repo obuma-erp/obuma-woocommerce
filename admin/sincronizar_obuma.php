@@ -22,7 +22,7 @@ if (isset($json->data[0]->empresa_id) && $json->data[0]->empresa_id > 0) {
  echo "</div>";
 }else{
  echo "<div class='alert alert-danger'>";
- echo "<strong>Hubo un error  al conectar con la API de Obuma,verifique el API KEY registrado en la configuraci&oacute;n del plugin . <a class='btn btn-primary' href='admin.php?page=configuracion'>Ir a la configuraci&oacute;n</a></strong><br>";
+ echo "<strong>Hubo un error  al conectar con la API de Obuma,verifique el API KEY registrado en la configuraci&oacute;n del plugin . <a class='btn btn-primary' href='admin.php?page=obuma_configuracion'>Ir a la configuraci&oacute;n</a></strong><br>";
 
  echo "</div>";
 }

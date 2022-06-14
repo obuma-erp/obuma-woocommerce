@@ -103,7 +103,7 @@ function load_css_js_frontend($page){
 function cargar_archivos($page){
 
     if(isset($_GET["page"])){
-        if($_GET["page"] != "sincronizar" && $_GET["page"] != "configuracion" ){
+        if($_GET["page"] != "obuma_sincronizar" && $_GET["page"] != "obuma_configuracion" ){
             return;
         }
     }

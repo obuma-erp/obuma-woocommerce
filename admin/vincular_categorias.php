@@ -48,7 +48,7 @@ require_once "functions.php";
 <div class="wrap">
 	<h1 class="wp-heading-inline"> Vincular categorías con OBUMA </h1>
 
-	<select onchange="window.location.href='?page=vincular_categorias&option='+this.value">
+	<select onchange="window.location.href='?page=obuma_vincular_categorias&option='+this.value">
 	<?php foreach ($taxonomias_seleccionadas as $key => $ts) { ?>
 		echo "<option value='<?php echo $ts; ?>' <?php if(isset($_GET["option"])){if($_GET["option"] == $ts){echo "selected";}} ?>><?php echo $ts; ?></option>
 	<?php } ?>
