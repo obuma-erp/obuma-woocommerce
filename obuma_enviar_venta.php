@@ -39,6 +39,7 @@ function create_tables(){
       `id` int(11) NOT NULL AUTO_INCREMENT,
        `categoria_woocommerce_id` int(11)  NOT NULL,
       `categoria_woocommerce_nombre` text  NOT NULL,
+      `woocommerce_taxonomy` text  NOT NULL,
        `obuma_id_category` int(11)  NOT NULL,
        PRIMARY KEY (`id`))";
     $wpdb->query($sql_categorias_obuma);
