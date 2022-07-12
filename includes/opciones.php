@@ -9,6 +9,8 @@ function ob_menu_administrador(){
 	add_submenu_page('obuma_configuracion','Log de sincronizaci&oacute;n','Log de sincronizaci&oacute;n','manage_options','obuma_log_sincronizacion','load_log_sincronizacion');
 	add_submenu_page('obuma_configuracion','Log de órdenes','Log de órdenes','manage_options','obuma_log_ordenes','load_log_ordenes');
 	add_submenu_page('obuma_configuracion','Log de webhook','Log de webhook','manage_options','obuma_log_webhook','load_log_webhook');
+	add_submenu_page('obuma_configuracion','Otros','Otros','manage_options','otros','load_otros');
+
 }
 
 add_action('admin_menu', 'ob_menu_administrador');

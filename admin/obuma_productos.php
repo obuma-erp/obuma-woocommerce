@@ -25,7 +25,6 @@ $data_productos = $json["data"];
 $cantidad_paginas = $json["data-total-pages"];
 
 
-
 //Variables log de sincronizacion:
 
 $log_synchronization_type = "Products";

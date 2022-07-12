@@ -3,7 +3,7 @@
 Plugin Name: Obuma Sync
 Plugin URI: 
 Description: Plugin Para sincronizar con el API DE OBUMA
-Version: 1.0
+Version: 1.0.1
 Author: Obuma
 Author URI: https://obuma.cl
 License: 
@@ -103,18 +103,18 @@ function load_css_js_frontend($page){
 function cargar_archivos($page){
 
     if(isset($_GET["page"])){
-        if($_GET["page"] != "obuma_sincronizar" && $_GET["page"] != "obuma_configuracion" ){
+        if($_GET["page"] != "obuma_sincronizar" && $_GET["page"] != "obuma_configuracion"  && $_GET["page"] != "otros" ){
             return;
         }
+        wp_register_style('obuma_bootstrap_css', plugins_url("/admin/css/bootstrap.min.css",__FILE__));
+        wp_enqueue_style('obuma_bootstrap_css');
     }
 
     wp_register_script("obuma_js",plugins_url("/admin/js/obuma.js",__FILE__),array("jquery"));
 
-    wp_register_style('obuma_bootstrap_css', plugins_url("/admin/css/bootstrap.min.css",__FILE__));
-
     wp_register_style('obuma_css', plugins_url("/admin/css/obuma.css",__FILE__));
     
-    wp_enqueue_style('obuma_bootstrap_css');
+    
 
     wp_enqueue_style('obuma_css');
 
@@ -175,6 +175,14 @@ function load_log_webhook(){
     require_once "admin/log_webhook.php";
 
 }
+
+
+function load_otros(){
+
+    require_once "admin/otros.php";
+
+}
+
 
 function custom_checkout_field($checkout){
 

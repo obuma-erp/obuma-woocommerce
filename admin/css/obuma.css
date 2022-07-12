@@ -91,3 +91,10 @@
 .centrar_select{
   text-align: center;
 }
+
+
+.button_black{
+
+  background-color: #000 !important;
+  color:  white;
+}
