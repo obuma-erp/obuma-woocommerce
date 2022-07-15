@@ -14,8 +14,10 @@
 		<div class="wrap">
 
 			<ul>
-				<li>Versi&oacute;n actual del plugin : <code>1.0.1</code></li>
-				<li>Requisitos m&iacute;nimos  : <code>Woocommerce 5.0</code>  &oacute; superior , <code>PHP 5.6</code> &oacute; superior</li>
+				<li>Versi&oacute;n  de WooCommerce instalada : <code><?php echo WC_VERSION; ?></code></li>
+				<li>Versi&oacute;n  de PHP instalada : <code><?php echo phpversion(); ?></code></li>
+				<li>Versi&oacute;n de Obuma Sync : <code>1.0.1</code></li>
+				<li>Requisitos m&iacute;nimos de Obuma Sync  : <code>Woocommerce 5.0</code>  &oacute; superior , <code>PHP 5.6</code> &oacute; superior</li>
 
 			</ul>
 

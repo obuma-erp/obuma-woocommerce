@@ -166,6 +166,30 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 				</tr>
 
 				<tr class="form-field form-required">
+					<th><label>ENVIAR VENTAS A OBUMA</label></th>
+					<td>
+				<input type="radio" value="0" name="enviar_ventas_obuma" class="form-control" id="enviar_ventas_obuma" <?php if(get_option("enviar_ventas_obuma") == 0){ echo "checked";} ?>> No 
+				<input type="radio" name="enviar_ventas_obuma" class="form-control" id="enviar_ventas_obuma" value="1" <?php if(get_option("enviar_ventas_obuma") == 1){ echo "checked";} ?>> Si 
+				<br>
+				<em style='color:#e74c3c;font-size: 0.8em;'>Permite enviar a OBUMA las ordenes que fueron completadas</em>
+				
+
+			</td>
+				</tr>
+<tr class="form-field form-required">
+					<th><label>ENVIAR A OBUMA AUTOMÁTICAMENTE</label></th>
+					<td>
+				<input type="radio" value="0" name="cambiar_a_completado" class="form-control" id="cambiar_a_completado" <?php if(get_option("cambiar_a_completado") == 0){ echo "checked";} ?>> No 
+				<input type="radio" name="cambiar_a_completado" class="form-control" id="cambiar_a_completado" value="1" <?php if(get_option("cambiar_a_completado") == 1){ echo "checked";} ?>> Si 
+				<br>
+				<em style='color:#e74c3c;font-size: 0.8em;'>Permite cambiar el estado del pedido a "COMPLETADO" despu&eacute;s de  realizar un pago, para ser enviado automaticamente a OBUMA</em>
+				
+
+			</td>
+				</tr>
+
+				
+				<tr class="form-field form-required">
 					<th><label>REBAJAR STOCK</label></th>
 					<td >
 				<input type="radio" value="0" name="rebajar_stock" class="form-control" id="rebajar_stock" <?php if(get_option("rebajar_stock") == 0){ echo "checked";} ?>> No 
@@ -236,28 +260,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 			</td>
 </tr>
 
-<tr class="form-field form-required">
-					<th><label>ENVIAR VENTAS A OBUMA</label></th>
-					<td>
-				<input type="radio" value="0" name="enviar_ventas_obuma" class="form-control" id="enviar_ventas_obuma" <?php if(get_option("enviar_ventas_obuma") == 0){ echo "checked";} ?>> No 
-				<input type="radio" name="enviar_ventas_obuma" class="form-control" id="enviar_ventas_obuma" value="1" <?php if(get_option("enviar_ventas_obuma") == 1){ echo "checked";} ?>> Si 
-				<br>
-				<em style='color:#e74c3c;font-size: 0.8em;'>Permite enviar a OBUMA las ordenes que fueron completadas</em>
-				
 
-			</td>
-				</tr>
-<tr class="form-field form-required">
-					<th><label>ENVIAR A OBUMA AUTOMÁTICAMENTE</label></th>
-					<td>
-				<input type="radio" value="0" name="cambiar_a_completado" class="form-control" id="cambiar_a_completado" <?php if(get_option("cambiar_a_completado") == 0){ echo "checked";} ?>> No 
-				<input type="radio" name="cambiar_a_completado" class="form-control" id="cambiar_a_completado" value="1" <?php if(get_option("cambiar_a_completado") == 1){ echo "checked";} ?>> Si 
-				<br>
-				<em style='color:#e74c3c;font-size: 0.8em;'>Permite cambiar el estado del pedido a "COMPLETADO" despu&eacute;s de  realizar un pago, para ser enviado automaticamente a OBUMA</em>
-				
-
-			</td>
-				</tr>
 
 
 <tr class="form-field form-required">
