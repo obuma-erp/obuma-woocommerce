@@ -239,8 +239,8 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 <tr class="form-field form-required">
 					<th><label>TIPO DE DOCUMENTO</label></th>
 					<td>
-				<input type="checkbox" required value="39" name="tipo_documento[]" multiple class="form-control" id="option-1" <?php if(in_array('39',json_decode(get_option("tipo_documento")))){ echo "checked";} ?>> Boleta
-				<input type="checkbox" required id="option-2" name="tipo_documento[]" multiple class="form-control" value="33" <?php if(in_array('33',json_decode(get_option("tipo_documento")))){ echo "checked";} ?>> Factura
+				<input type="checkbox"  value="39" name="tipo_documento[]" multiple class="form-control" id="option-1" <?php if(in_array('39',json_decode(get_option("tipo_documento")))){ echo "checked";} ?>> Boleta
+				<input type="checkbox"  id="option-2" name="tipo_documento[]" multiple class="form-control" value="33" <?php if(in_array('33',json_decode(get_option("tipo_documento")))){ echo "checked";} ?>> Factura
 				<br>
 				
 
