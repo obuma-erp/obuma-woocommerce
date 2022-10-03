@@ -16,7 +16,7 @@ function obtener_categorias(){
 
 			if (count($categorias_taxonomy) > 0) {
 				$categorias_vinculadas[$indice]["producto_categoria_id"] = $cat->producto_categoria_id;
-				$categorias_vinculadas[$indice]["producto_categoria_nombre"] = $cat->producto_categoria_nombre;
+				$categorias_vinculadas[$indice]["producto_categoria_nombre"] = $categorias_taxonomy[0]->name;
 				$indice++;
 			}
 		}
