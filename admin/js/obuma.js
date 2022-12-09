@@ -23,6 +23,9 @@ jQuery(document).ready(function(){
   jQuery("#cargar_vistas").html('<p class="centrar marTop">Sección de Resultados</p><br><span class="glyphicon glyphicon-signal icono"  aria-hidden="true"></span>')
   
 
+let url_obuma_ajax = ajax_object.ajaxurl ? ajax_object.ajaxurl : ajax_object.ajax_url
+
+
   /*
   
   DAMOS CLICK EN EL PANEL DE SINCRONIZACION, SI HAY LA POSIBILIDAD DE SELECCIONAR CATEGORIAS, APARECERÁ EL SELECT, DE LO CONTRARIO EMPEZARÁ A SINCRONIZAR 
@@ -40,7 +43,7 @@ jQuery(document).ready(function(){
   if (pagina == "productos_imagenes" || pagina == "precios" || pagina == "productos"  || pagina == "stock") {
     jQuery.ajax({
     method : "POST",
-    url : ajax_object.ajaxurl,
+    url : url_obuma_ajax,
     data : {
       obtener : true,
       action : 'obuma_action',
@@ -161,7 +164,7 @@ jQuery(document).ready(function(){
     var pagina = parseInt(numero_pagina) + 1;
     jQuery.ajax({
       method : "POST",
-      url : ajax_object.ajaxurl,
+      url : url_obuma_ajax,
       data : { 
         pagina : pagina,
         categorias_seleccionadas : categorias_seleccionadas,
@@ -413,7 +416,7 @@ if(document.getElementById("sincronizar_comunas")){
 
       jQuery.ajax({
     method : "POST",
-    url : ajax_object.ajaxurl,
+    url : url_obuma_ajax,
     data : {
       action : 'obuma_action',
       url :  "set_comunas"
@@ -445,7 +448,7 @@ if(document.getElementById("limpiar_registros")){
 
     jQuery.ajax({
     method : "POST",
-    url : ajax_object.ajaxurl,
+    url : url_obuma_ajax,
     data : {
       action : 'obuma_action',
       url :  "limpiar_registros"

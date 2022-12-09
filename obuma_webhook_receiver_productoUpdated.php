@@ -56,8 +56,6 @@ if ($generatedSignature !== $headerSignature) {
 
 		if ($existe !== false) {
 
-			
-
 			try {
 
 				$my_post = array(
@@ -67,7 +65,9 @@ if ($generatedSignature !== $headerSignature) {
 				);
 
 				wp_update_post($my_post);
+
 				update_post_meta($existe[0]->ID, '_width', $data["producto_ancho"]);
+
 				update_post_meta($existe[0]->ID, '_height', $data["producto_alto"]);
 						
 				$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."posts SET obuma_id_product=%d WHERE ID=%d",$producto_id,$existe[0]->ID));
@@ -75,12 +75,28 @@ if ($generatedSignature !== $headerSignature) {
 				$categoria_existe = existe_categoria_vincular($producto_categoria);
 
 				if ($categoria_existe !== false) {
-					wp_set_object_terms((int)$existe[0]->ID, (int)$categoria_existe[0]->term_id , $categoria_existe[0]->woocommerce_taxonomy,false);
-				}else{
-					$categoria_no_definida = existe_sin_categorizar();
-					if ($categoria_no_definida !== false) {
-						wp_set_object_terms((int)$existe[0]->ID,(int)$categoria_no_definida[0]->term_id, 'product_cat',false);
+
+					$terms_by_product = wp_get_object_terms( (int)$existe[0]->ID, $categoria_existe[0]->woocommerce_taxonomy);
+
+					$columns_term_id = array_column($terms_by_product, "term_id");
+
+					if(!in_array((int)$categoria_existe[0]->term_id, $columns_term_id)){
+
+						wp_set_object_terms((int)$existe[0]->ID, (int)$categoria_existe[0]->term_id ,$categoria_existe[0]->woocommerce_taxonomy,false);
+
 					}
+
+
+				}else{
+
+					$categoria_no_definida = existe_sin_categorizar();
+
+					if ($categoria_no_definida !== false) {
+
+						wp_set_object_terms((int)$existe[0]->ID,(int)$categoria_no_definida[0]->term_id, 'product_cat',false);
+
+					}
+
 				}
 
 
@@ -88,15 +104,20 @@ if ($generatedSignature !== $headerSignature) {
 
 
 			} catch (Exception $e) {
+
 					$result[]["message"] = $e->getMessage();
+
 					$result[]["code"] = $e->getCode();
+
 					$result[]["file"] = $e->getFile();
 
 			}
 
 
 		}else{
+
 			$result[]["message"] = "El codigo comercial del producto no existe en woocommerce";
+			
 		}
 
 	}else{
