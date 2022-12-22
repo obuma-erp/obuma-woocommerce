@@ -303,11 +303,19 @@ function call_order_status_changed($order_id,$old,$new){
 
 
 
+            $obuma_tipo_documento = get_post_meta($id, '_billing_tipo_documento', true);
 
+
+            $obuma_tipo_documento_value = 39;
+
+            if($obuma_tipo_documento == "_33"){
+
+                $obuma_tipo_documento_value = 33;
+            }
 
                 if (get_option("nota_venta_segundo_plano") == 0) {
 
-                    $data["tipo_documento"] = get_post_meta($id, '_billing_tipo_documento', true);
+                    $data["tipo_documento"] = $obuma_tipo_documento_value;
 
                 }elseif(get_option("nota_venta_segundo_plano") == 1){
 
@@ -315,13 +323,13 @@ function call_order_status_changed($order_id,$old,$new){
 
                 }else{
 
-                    if(get_post_meta($id, '_billing_tipo_documento', true) == 33){
+                    if($obuma_tipo_documento_value == 33){
 
                           $data["tipo_documento"] = 4;
 
                     }else{
 
-                         $data["tipo_documento"] = get_post_meta($id, '_billing_tipo_documento', true);
+                         $data["tipo_documento"] = $obuma_tipo_documento_value;
                          
                     }
                 }
@@ -334,7 +342,7 @@ function call_order_status_changed($order_id,$old,$new){
                 $data["email"] = get_post_meta($id, '_billing_email', true);
                 $data["telefono"] = get_post_meta($id, '_billing_phone', true);
 
-                if(get_post_meta($id, '_billing_tipo_documento', true) == "39"){
+                if($obuma_tipo_documento_value == "39"){
                     $data["razon_social"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
                 }else{
                     if(empty(trim(get_post_meta($id, '_billing_company', true)))){
@@ -531,7 +539,7 @@ function call_order_status_changed($order_id,$old,$new){
 
 function billing_vat_field_process() {
     // Check if set, if its not set add an error.
-    if ($_POST['billing_tipo_documento'] == "33" ){
+    if ($_POST['billing_tipo_documento'] == "_33" ){
         if (empty($_POST['billing_company'])) {
             //wc_enqueue_js( "alert('asasasas')" );
             wc_add_notice( __( 'El nombre de la empresa es un campo obligatorio' ), 'error' );
@@ -556,18 +564,18 @@ function custom_override_checkout_fields($fields){
 
 
 
-    $tipo_documento = get_option("tipo_documento");
+    $tipo_documento = get_option("tipo_documento");                           
     $tipo_documento = json_decode($tipo_documento);
 
     $data_tipo_documento = array();
     $data_tipo_documento[""] = 'Selecciona tipo de documento';
 
     if (in_array("39",$tipo_documento)) {
-        $data_tipo_documento["39"] = "Boleta";
+        $data_tipo_documento["_39"] = "Boleta";
     }
 
     if (in_array("33",$tipo_documento)) {
-        $data_tipo_documento["33"] = "Factura";
+        $data_tipo_documento["_33"] = "Factura";
     }
 
 
@@ -617,7 +625,7 @@ function admin_view_order_billing($order){
 
         echo '<p><strong style="">'.__('Tipo de documento').':<br></strong> ' ;
 
-        if(get_post_meta( $order->get_id(), '_billing_tipo_documento', true) == '39'){
+        if(get_post_meta( $order->get_id(), '_billing_tipo_documento', true) == '_39'){
             echo "Boleta";
         }else{
             echo "Factura";
@@ -650,7 +658,7 @@ function oml_custom_checkout_field_display_admin_order_meta($order){
     echo '<tr>';
     echo '<th scope="row">'.__('Tipo de documento').'</th>';
     echo '<td><span class="woocommerce-Price-amount amount">';
-    if(get_post_meta($order->get_id(), '_billing_tipo_documento', true) == '39'){
+    if(get_post_meta($order->get_id(), '_billing_tipo_documento', true) == '_39'){
         echo "Boleta";
     }else{
         echo "Factura";
@@ -663,7 +671,7 @@ function oml_custom_checkout_field_display_admin_order_meta($order){
     if ($order->get_status() == "completed") {
         $order_obuma = $wpdb->get_results("SELECT  dte_pdf from ".$wpdb->prefix."obuma_order WHERE order_woocommerce_id='".$order->get_id()."'");
         echo "<a href='".$order_obuma[0]->dte_pdf."' class='button wc-backward'>";
-        if(get_post_meta( $order->get_id(), '_billing_tipo_documento', true) == '39'){
+        if(get_post_meta( $order->get_id(), '_billing_tipo_documento', true) == '_39'){
             echo "DESCARGAR BOLETA";
         }else{
             echo "DESCARGAR FACTURA";
