@@ -43,8 +43,14 @@ if (isset($_POST["categorias_seleccionadas"])) {
 			$inicio = $pagina * 100 - 100;
 			$id_categoria= $wpdb->get_results("SELECT term_id FROM  ".$wpdb->prefix."terms WHERE obuma_id_category > 0 AND obuma_id_category='".$_POST["categorias_seleccionadas"]."'");
 			$id_categoria = $id_categoria[0]->term_id;
+
+
 			$pro = $wpdb->get_results("SELECT p.obuma_id_product,p.ID,p.post_title FROM ".$wpdb->prefix."term_relationships tr INNER JOIN ".$wpdb->prefix."posts p ON tr.object_id=p.ID WHERE tr.term_taxonomy_id='".$id_categoria."' AND p.obuma_id_product > 0  AND p.post_status <> 'trash'  AND p.post_type='product' LIMIT $inicio,100");
-			$cantidad_paginas = count($pro);
+
+			$count_products = $wpdb->get_results("SELECT p.obuma_id_product,p.ID,p.post_title FROM ".$wpdb->prefix."term_relationships tr INNER JOIN ".$wpdb->prefix."posts p ON tr.object_id=p.ID WHERE tr.term_taxonomy_id='".$id_categoria."' AND p.obuma_id_product > 0  AND p.post_status <> 'trash'  AND p.post_type='product'");
+
+
+			$cantidad_paginas = count($count_products);
 			$cantidad_paginas = ceil($cantidad_paginas/100);
 		}
 
