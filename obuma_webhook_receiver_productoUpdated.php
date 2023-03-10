@@ -67,8 +67,12 @@ if ($generatedSignature !== $headerSignature) {
 				wp_update_post($my_post);
 
 				update_post_meta($existe[0]->ID, '_width', $data["producto_ancho"]);
-
+					
 				update_post_meta($existe[0]->ID, '_height', $data["producto_alto"]);
+					
+				update_post_meta($existe[0]->ID, '_length', $data["producto_largo"]);
+
+				update_post_meta($existe[0]->ID, '_weight', $data["producto_peso_fisico"]);
 						
 				$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."posts SET obuma_id_product=%d WHERE ID=%d",$producto_id,$existe[0]->ID));
 

@@ -81,8 +81,8 @@ if ($generatedSignature !== $headerSignature) {
 				update_post_meta( $post_id, '_sale_price', 0 );
 				update_post_meta( $post_id, '_purchase_note', '' );
 				update_post_meta( $post_id, '_featured', 'no' );
-				update_post_meta( $post_id, '_weight', '' );
-				update_post_meta( $post_id, '_length', '' );
+				update_post_meta( $post_id, '_weight', $data["producto_peso_fisico"] );
+				update_post_meta( $post_id, '_length', $data["producto_largo"] );
 				update_post_meta( $post_id, '_width', $data["producto_ancho"]);
 				update_post_meta( $post_id, '_height',$data["producto_alto"]);
 				update_post_meta( $post_id, '_sku', $producto_codigo_comercial);
