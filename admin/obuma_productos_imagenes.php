@@ -14,7 +14,7 @@ $mensaje = "";
 $result = array();
 $json = array();
 
-
+$alert = array();
 
 
 
@@ -49,7 +49,7 @@ if(isset($data_imagenes_productos) && $cantidad_paginas > 0){
 		
 		$imagen_url = $value["producto_imagen_url"];
 
-		$existe_product = $wpdb->get_results("SELECT ID FROM  ".$wpdb->prefix."posts WHERE  post_status <> 'trash'  AND post_type='product' AND obuma_id_product='".$value['obuma_id_product']."' LIMIT 1");
+		$existe_product = $wpdb->get_results("SELECT ID FROM  ".$wpdb->prefix."posts WHERE  post_status <> 'trash'  AND post_type='product' AND obuma_id_product='".$value['producto_id']."' LIMIT 1");
 
 		if(count($existe_product) == 1 ){
 
@@ -61,19 +61,23 @@ if(isset($data_imagenes_productos) && $cantidad_paginas > 0){
 
 					$imagen_product = end($imagen_explode);
 
-					$existe_imagen = $wpdb->get_results("SELECT ID FROM  ".$wpdb->prefix."posts WHERE post_title='".sanitize_file_name($imagen_product)."' AND post_type='attachment' LIMIT 1");
+					$existe_imagen = $wpdb->get_results("SELECT ID,post_parent FROM  ".$wpdb->prefix."posts WHERE post_title='".sanitize_file_name($imagen_product)."' AND post_type='attachment' LIMIT 1");
 
 					if(count($existe_imagen) == 0){
 
 						$imagen_a_copiar = $imagen_url;
 
-						attach_product_thumbnail($existe_product->ID, $imagen_a_copiar, 0);
+						attach_product_thumbnail($existe_product[0]->ID, $imagen_a_copiar, 0);
 
 						$resumen["resumen"][$indice]["name"] = $imagen_url;
 
 						$resumen["resumen"][$indice]["action"] = "actualizado";
 
 						$indice++;
+					}else{
+						
+						$alert[] = array("name" => $imagen_url, "message" => "La imagen ya se encuentra en la base de datos");
+						
 					}
 
 
@@ -83,6 +87,9 @@ if(isset($data_imagenes_productos) && $cantidad_paginas > 0){
 			}
 
 
+		}else{
+
+			$alert[] = array("name" => $imagen_url, "message" => "El producto no se encuentra en woocommerce, debe tener asignado el obuma_id_product");
 		}
 	}
 }else{
@@ -103,7 +110,7 @@ $log[$indice_log]["response"] = $json;
 $indice_log++;
 
 
-$result = array("completado" => $pagina,"total" => $cantidad_paginas,"resumen" => $resumen,"log" => $log);
+$result = array("completado" => $pagina,"total" => $cantidad_paginas,"resumen" => $resumen,"log" => $log , "alert" => $alert);
 
 
 if($cantidad_paginas > 0 && $pagina == $cantidad_paginas){
