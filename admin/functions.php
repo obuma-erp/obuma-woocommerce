@@ -136,6 +136,12 @@ function verificar_categorias_seleccionadas($url,$categoria_seleccionada,$nombre
             $url_final .= "?categoria=" . $categoria_seleccionada . "&page=" . $pagina;
         }          
     }
+
+    if(trim($nombre) == "productos"){
+
+        $url_final .= "&activo=1";
+    }
+
     $json = ObumaConector::get($url_final,get_option("api_key"));   
     return $json;
 }
