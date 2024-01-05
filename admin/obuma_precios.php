@@ -18,7 +18,9 @@ $pagina = obtener_numero_pagina($_POST["pagina"]);
 
 $url = 	set_url()."productosConsultaPrecios.list.json";
 
-$json = verificar_categorias_seleccionadas($url,$_POST["categorias_seleccionadas"],"precios");
+$lista_precio = get_option("lista_precio");
+
+$json = verificar_categorias_seleccionadas($url,$_POST["categorias_seleccionadas"],"precios",null,$lista_precio);
 $json = json_encode($json, true);
 $json = json_decode($json, true);
 $data_precios = $json["data"];

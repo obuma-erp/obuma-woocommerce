@@ -113,7 +113,7 @@ function is_image($image){
 }
 
 
-function verificar_categorias_seleccionadas($url,$categoria_seleccionada,$nombre,$bodega = null){
+function verificar_categorias_seleccionadas($url,$categoria_seleccionada,$nombre,$bodega = null,$lista_precio = null){
     global $pagina;
     $url_final = "";
 
@@ -140,6 +140,16 @@ function verificar_categorias_seleccionadas($url,$categoria_seleccionada,$nombre
     if(trim($nombre) == "productos"){
 
         $url_final .= "&activo=1";
+    }
+
+
+
+    if(trim($nombre) == "precios"){
+
+        if(isset($lista_precio) && !empty($lista_precio)){
+
+            $url_final .= "&lista_precio_codigo=". $lista_precio;
+        }
     }
 
     $json = ObumaConector::get($url_final,get_option("api_key"));   
