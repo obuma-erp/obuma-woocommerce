@@ -101,6 +101,16 @@ function total_paginas_first($file,$pagina){
     echo json_encode(array("total" => $cantidad_paginas, "first" => true,"pagina" => $pagina));
 }
 
+
+
+function get_bodegas(){
+
+    $json = ObumaConector::get(set_url()."empresaBodegas.list.json",get_option("api_key"));
+    $json = json_encode($json, true);
+    $json = json_decode($json, true);
+    return $json;
+}
+
 function is_image($image){
     $result = false;
     $permit = ["jpg","jpeg","png"];

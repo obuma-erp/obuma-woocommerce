@@ -27,8 +27,8 @@ register_deactivation_hook(__FILE__,'desactivar');
 
 add_action("admin_enqueue_scripts","cargar_archivos");
 add_action("wp_enqueue_scripts","load_css_js_frontend");
-
 add_action( "wp_ajax_obuma_action", "so_wp_ajax_function" );
+add_action( 'add_meta_boxes', 'add_section_order_admin' );
 
 if (get_option("enviar_ventas_obuma") == 1) {
 
@@ -263,6 +263,35 @@ function custom_checkout_field($checkout){
 
 
 }
+
+
+function add_section_order_admin(){
+
+    add_meta_box(
+        'custom-order-meta-box',
+        __( 'Par&aacute;metros de OBUMA', 'webkul' ),
+        'add_section_order_admin_callback',
+        'shop_order',
+        'advanced',
+        'core'
+    );
+
+
+}
+
+
+function add_section_order_admin_callback($post){
+
+
+    $order_id = $post->ID;
+
+    
+    require_once "admin/admin_list_bodegas.php";
+
+
+
+}
+
 
 
 function save_custom_billingt_fields( $order, $data ) {
@@ -540,8 +569,7 @@ function call_order_status_changed($order_id,$old,$new){
        
 
      }else{
-
-        update_post_meta($order_id, 'bodega_obuma', '' );
+        
         $datos_log  = array('data' => [], "response" => [],"estado" => strtolower($new));
         insert_order_obuma_log($datos_log,$order_id);
      }
