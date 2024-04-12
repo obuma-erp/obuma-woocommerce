@@ -375,9 +375,20 @@ function call_order_status_changed($order_id,$old,$new){
                 $customer_note = html_entity_decode($customer_note);
 
 
+                //Obtenemos el valor de la bodega asociada a un pedido mediante un campo personalizado
+
+                $bodega_pedido_campo_personalizado = null;
+
+                if(get_option("cambiar_a_completado") == 0){
+
+                    $bodega_pedido_campo_personalizado = get_post_meta($id, 'bodega_obuma', true);
+
+                }
+                
+
                 $data["observacion"] =  $customer_note;
                 $data["sucursal"] = get_option("sucursal");
-                $data["bodega"] = get_option("bodega");
+                $data["bodega"] =  (isset($bodega_pedido_campo_personalizado) && !empty($bodega_pedido_campo_personalizado)) ? $bodega_pedido_campo_personalizado : get_option("bodega");
                 $data["usuario"] = get_option("usuario");
                 $data["canal_venta"] = get_option("canal_venta");
                 $data["vendedor"] = get_option("vendedor");
@@ -529,6 +540,8 @@ function call_order_status_changed($order_id,$old,$new){
        
 
      }else{
+
+        update_post_meta($order_id, 'bodega_obuma', '' );
         $datos_log  = array('data' => [], "response" => [],"estado" => strtolower($new));
         insert_order_obuma_log($datos_log,$order_id);
      }
