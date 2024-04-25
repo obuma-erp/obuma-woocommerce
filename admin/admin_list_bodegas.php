@@ -33,7 +33,7 @@
         echo "<p id='message_set_bodega'></p>";
         echo "<select id='list_obuma_bodegas' style='width:25%;'>";
 
-        echo "<option>Seleccione la bodega</option>";
+        echo "<option value=''>Seleccione la bodega</option>";
 
         foreach ($data_get_bodegas as $key => $value) {
 
