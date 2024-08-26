@@ -298,6 +298,7 @@ function vinculadas($taxonomy){
 
 
 
+
 function set_comunas(){
 
   global $wpdb;

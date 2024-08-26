@@ -92,7 +92,7 @@ function desactivar(){
 }
 
 
-function load_css_js_frontend($page){
+function load_css_js_frontend(){
 
     wp_register_script("obuma_js",plugins_url("/public/js/obuma.js",__FILE__),array("jquery"));
     wp_enqueue_script("jquery");
@@ -100,7 +100,7 @@ function load_css_js_frontend($page){
 }
 
 
-function cargar_archivos($page){
+function cargar_archivos(){
 
     if(isset($_GET["page"])){
         if($_GET["page"] != "obuma_sincronizar" && $_GET["page"] != "obuma_configuracion"  && $_GET["page"] != "otros" ){
@@ -312,6 +312,46 @@ function call_order_status_changed($order_id,$old,$new){
         // enviar_orden_venta($order->id);
         $id = $order_id;
 
+        //Obtener la matadata asociada a la orden usando la funcion get_post_meta 
+        /*
+
+        $meta_billing_giro_comercial = get_post_meta($id,'_billing_giro_comercial',true);
+        $meta_billing_tipo_documento = get_post_meta($id, '_billing_tipo_documento', true);
+        $meta_billing_first_name = get_post_meta($id, '_billing_first_name', true);
+        $meta_billing_last_name = get_post_meta($id, '_billing_last_name', true);
+        $meta_billing_email = get_post_meta($id, '_billing_email', true);
+        $meta_billing_phone = get_post_meta($id, '_billing_phone', true);
+        $meta_billing_company = get_post_meta($id, '_billing_company', true);
+        $meta_billing_address_1 = get_post_meta($id, '_billing_address_1', true);
+        $meta_billing_address_2 = get_post_meta($id, '_billing_address_2', true);
+        $meta_billing_state = get_post_meta($id, '_billing_state', true);
+        
+        $meta_obuma_rut = get_post_meta($id, 'obuma_rut', true);
+        $meta_obuma_bodega = get_post_meta($id, 'bodega_obuma', true);
+
+        */
+
+
+        $get_order = wc_get_order($id);
+
+        //obtenemos la metadata asociada a la orden
+        $meta_billing_giro_comercial = $get_order->get_meta('_billing_giro_comercial');
+        $meta_billing_tipo_documento = $get_order->get_meta('_billing_tipo_documento');
+        $meta_billing_first_name = $get_order->get_meta('_billing_first_name');
+        $meta_billing_last_name = $get_order->get_meta('_billing_last_name');
+        $meta_billing_email = $get_order->get_meta('_billing_email');
+        $meta_billing_phone = $get_order->get_meta('_billing_phone');
+        $meta_billing_company = $get_order->get_meta('_billing_company');
+        $meta_billing_address_1 = $get_order->get_meta('_billing_address_1');
+        $meta_billing_address_2 = $get_order->get_meta('_billing_address_2');
+        $meta_billing_state = $get_order->get_meta('_billing_state');
+
+
+        //Metadata de Obuma vinculada a una orden
+        
+        $meta_obuma_rut = $get_order->get_meta('obuma_rut');
+        $meta_obuma_bodega = $get_order->get_meta('bodega_obuma');
+
         $order_obuma_existe = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."obuma_order WHERE order_woocommerce_id='".$id."'");
 
 
@@ -320,19 +360,19 @@ function call_order_status_changed($order_id,$old,$new){
             $productos_orden = $order->get_items();
             $data["orden_id"] = $id;
 
-            if (empty(get_post_meta($id, '_billing_giro_comercial', true))) {
+            if (empty($meta_billing_giro_comercial)) {
                 $data["giro_comercial"] = "-";
             }else{
-                $data["giro_comercial"] = get_post_meta($id, '_billing_giro_comercial', true);
+                $data["giro_comercial"] = $meta_billing_giro_comercial;
             }
             
-            //update_post_meta( $id, 'obuma_rut', get_post_meta($id, 'obuma_rut', true));
+            //update_post_meta( $id, 'obuma_rut', $meta_obuma_rut);
 
-            $data["rut"] = get_post_meta($id, 'obuma_rut', true);
+            $data["rut"] = $meta_obuma_rut;
 
 
 
-            $obuma_tipo_documento = get_post_meta($id, '_billing_tipo_documento', true);
+            $obuma_tipo_documento = $meta_billing_tipo_documento;
 
 
             $obuma_tipo_documento_value = 39;
@@ -368,26 +408,26 @@ function call_order_status_changed($order_id,$old,$new){
 
 
                 //$data["tipo_documento"] = 4;
-                $data["email"] = get_post_meta($id, '_billing_email', true);
-                $data["telefono"] = get_post_meta($id, '_billing_phone', true);
+                $data["email"] = $meta_billing_email;
+                $data["telefono"] = $meta_billing_phone;
 
                 if($obuma_tipo_documento_value == "39"){
-                    $data["razon_social"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
+                    $data["razon_social"] = $meta_billing_first_name . " " . $meta_billing_last_name;
                 }else{
-                    if(empty(trim(get_post_meta($id, '_billing_company', true)))){
-                        $data["razon_social"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
+                    if(empty(trim($meta_billing_company))){
+                        $data["razon_social"] = $meta_billing_first_name . " " . $meta_billing_last_name;
 
                     }else{
-                        $data["razon_social"] = get_post_meta($id, '_billing_company', true);
+                        $data["razon_social"] = $meta_billing_company;
                     }
                 }
                 
             
-                $data["contacto"] = get_post_meta($id, '_billing_first_name', true) . " " . get_post_meta($id, '_billing_last_name', true);
+                $data["contacto"] = $meta_billing_first_name . " " . $meta_billing_last_name;
 
-                $data["direccion"] = get_post_meta($id, '_billing_address_1', true) . " - " . get_post_meta($id, '_billing_address_2', true);
+                $data["direccion"] = $meta_billing_address_1 . " - " . $meta_billing_address_2;
 
-                $data_comuna = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."obuma_comunas WHERE pg_comuna_codigo_chilexpress='".get_post_meta($id, '_billing_state', true)."'");
+                $data_comuna = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."obuma_comunas WHERE pg_comuna_codigo_chilexpress='".$meta_billing_state."'");
                 
 
                 if (isset($data_comuna[0]->pg_comuna_id)) {
@@ -410,7 +450,7 @@ function call_order_status_changed($order_id,$old,$new){
 
                 if(get_option("cambiar_a_completado") == 0){
 
-                    $bodega_pedido_campo_personalizado = get_post_meta($id, 'bodega_obuma', true);
+                    $bodega_pedido_campo_personalizado = $meta_obuma_bodega;
 
                 }
                 
@@ -648,25 +688,47 @@ function custom_override_checkout_fields($fields){
 
 function admin_view_order_billing($order){
 
-    $_billing_rut_obuma = get_post_meta($order->get_id(),'_billing_rut', true );
+
+    //Obtener la matadata asociada a la orden usando la funcion get_post_meta 
+    
+    /*
+        $meta_billing_rut = get_post_meta($order->get_id(),'_billing_rut',true);
+        $meta_billing_giro_comercial = get_post_meta($order->get_id(),'_billing_giro_comercial',true);
+        $meta_billing_tipo_documento = get_post_meta($order->get_id(), '_billing_tipo_documento', true);        
+        $meta_obuma_rut = get_post_meta($order->get_id(), 'obuma_rut', true);
+        $meta_billing_url_pdf = get_post_meta($order->get_id(), 'obuma_url_pdf', true);
+
+    */
+
+    
+    $get_order = wc_get_order($order->get_id());
+
+    $meta_billing_rut = $get_order->get_meta('_billing_rut');
+    $meta_obuma_rut = $get_order->get_meta('obuma_rut');
+    $meta_billing_giro_comercial = $get_order->get_meta('_billing_giro_comercial');
+    $meta_billing_tipo_documento = $get_order->get_meta('_billing_tipo_documento');
+    $meta_billing_url_pdf = $get_order->get_meta('obuma_url_pdf');
+
+
+    $_billing_rut_obuma = $meta_billing_rut;
 
     if(!isset($_billing_rut_obuma) || empty($_billing_rut_obuma)){
-         echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . get_post_meta( $order->get_id(), 'obuma_rut', true ) . '</p>';
+         echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . $meta_obuma_rut . '</p>';
     }else{
-         echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . get_post_meta( $order->get_id(), '_billing_rut', true ) . '</p>';
+         echo '<p><strong style="">'.__('R.U.T.').':<br></strong> ' . $meta_billing_rut . '</p>';
     }
 
 
-    if(!empty(get_post_meta( $order->get_id(), '_billing_giro_comercial', true ))){
-        echo '<p><strong style="display:flex;">'.__('Giro comercial').':</strong> ' . get_post_meta( $order->get_id(), '_billing_giro_comercial', true ) . '</p>';
+    if(!empty($meta_billing_giro_comercial)){
+        echo '<p><strong style="display:flex;">'.__('Giro comercial').':</strong> ' . $meta_billing_giro_comercial . '</p>';
     }
     
 
-    if(!empty(get_post_meta( $order->get_id(), '_billing_tipo_documento', true))){
+    if(!empty($meta_billing_tipo_documento)){
 
         echo '<p><strong style="">'.__('Tipo de documento').':<br></strong> ' ;
 
-        if(get_post_meta( $order->get_id(), '_billing_tipo_documento', true) == '_39'){
+        if($meta_billing_tipo_documento == '_39'){
             echo "Boleta";
         }else{
             echo "Factura";
@@ -675,31 +737,46 @@ function admin_view_order_billing($order){
 
     }
 
-    if(!empty(get_post_meta( $order->get_id(), 'obuma_url_pdf', true))){
-        echo "<p><a target='__blank' href='".get_post_meta( $order->get_id(), 'obuma_url_pdf', true)."'>Ver DTE Generada en OBUMA</a></p>";
+    if(!empty($meta_billing_url_pdf)){
+        echo "<p><a target='__blank' href='".$meta_billing_url_pdf."'>Ver DTE Generada en OBUMA</a></p>";
     }
     
      
 }
 
 function oml_custom_checkout_field_display_admin_order_meta($order){
+    
     global $wpdb;
 
+    //Obtener la matadata asociada a la orden usando la funcion get_post_meta 
+    
+    /*
+        $meta_billing_giro_comercial = get_post_meta($order->get_id(),'_billing_giro_comercial',true);
+        $meta_billing_tipo_documento = get_post_meta($order->get_id(), '_billing_tipo_documento', true);        
+        $meta_obuma_rut = get_post_meta($order->get_id(), 'obuma_rut', true);
+
+    */
+
+    $get_order = wc_get_order($order->get_id());
+
+    $meta_obuma_rut = $get_order->get_meta('obuma_rut');
+    $meta_billing_giro_comercial = $get_order->get_meta('_billing_giro_comercial');
+    $meta_billing_tipo_documento = $get_order->get_meta('_billing_tipo_documento');
 
     echo '<table class="woocommerce-table woocommerce-table--order-details shop_table order_details">';
     echo "<tbody>";
     echo '<tr class="woocommerce-table__line-item order_item">';
     echo '<th scope="row">'.__('R.U.T.').'</th>';
-    echo '<td><span class="woocommerce-Price-amount amount">'. get_post_meta($order->get_id(),'obuma_rut', true ) . '</span></td>';
+    echo '<td><span class="woocommerce-Price-amount amount">'. $meta_obuma_rut . '</span></td>';
     echo '</tr>';
     echo '<tr>';
     echo '<th scope="row">'.__('Giro comercial').'</th>';
-    echo '<td><span class="woocommerce-Price-amount amount">'. get_post_meta($order->get_id(),'_billing_giro_comercial', true ) . '</span></td>';
+    echo '<td><span class="woocommerce-Price-amount amount">'. $meta_billing_giro_comercial . '</span></td>';
     echo '</tr>';
     echo '<tr>';
     echo '<th scope="row">'.__('Tipo de documento').'</th>';
     echo '<td><span class="woocommerce-Price-amount amount">';
-    if(get_post_meta($order->get_id(), '_billing_tipo_documento', true) == '_39'){
+    if($meta_billing_tipo_documento == '_39'){
         echo "Boleta";
     }else{
         echo "Factura";
@@ -712,7 +789,7 @@ function oml_custom_checkout_field_display_admin_order_meta($order){
     if ($order->get_status() == "completed") {
         $order_obuma = $wpdb->get_results("SELECT  dte_pdf from ".$wpdb->prefix."obuma_order WHERE order_woocommerce_id='".$order->get_id()."'");
         echo "<a href='".$order_obuma[0]->dte_pdf."' class='button wc-backward'>";
-        if(get_post_meta( $order->get_id(), '_billing_tipo_documento', true) == '_39'){
+        if($meta_billing_tipo_documento == '_39'){
             echo "DESCARGAR BOLETA";
         }else{
             echo "DESCARGAR FACTURA";
