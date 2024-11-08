@@ -345,7 +345,7 @@ function call_order_status_changed($order_id,$old,$new){
         $meta_billing_address_1 = $get_order->get_meta('_billing_address_1');
         $meta_billing_address_2 = $get_order->get_meta('_billing_address_2');
         $meta_billing_state = $get_order->get_meta('_billing_state');
-
+        $meta_billing_city = $get_order->get_meta('_billing_city');
 
         //Metadata de Obuma vinculada a una orden
         
@@ -434,8 +434,8 @@ function call_order_status_changed($order_id,$old,$new){
                     $data["comuna"] =  $data_comuna[0]->pg_comuna_id;
                     $data["region"] = $data_comuna[0]->rel_pg_region_id;
                 }else{
-                    $data["comuna"] = "";
-                    $data["region"] = "";
+                    $data["comuna"] = $meta_billing_city;
+                    $data["region"] = $meta_billing_state;
                 }
 
 
