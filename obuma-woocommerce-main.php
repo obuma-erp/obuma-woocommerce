@@ -505,16 +505,44 @@ function call_order_status_changed($order_id,$old,$new){
                 //Total incluido el envio $order->get_total();
                 $indice = 0;
                 foreach ($productos_orden as $item) {
+
                     $producto = wc_get_product($item->get_product_id());
-                    if ($data["tipo_documento"] != "39") {
-                        $data["orden_detalle"][$indice]["precio"] = ($order->get_item_total($item) / 1.19);
-                        $data["orden_detalle"][$indice]["subtotal"] = ($order->get_line_total($item) /1.19);
+
+
+
+                    /*
+
+                    
+                    Por defecto se trabaja con valores brutos , es decir  el iva es descontado del producto en todos los documentos ,excepto en las boletas.
+
+                    Si el plugin está configurado para trabajar con valor neto , entonces el iva es descontado del producto solo cuando el documento es una boleta.
+
+
+                    */
+
+                    $precio = 0;
+
+                    $subtotal = 0;
+                    
+                    $item_total = $order->get_item_total($item);
+
+                    $line_total = $order->get_line_total($item);
+
+                    if (get_option("sincronizar_precio") == 1) {
+
+                        $precio = $data["tipo_documento"] != "39" ? $item_total : ($item_total / 1.19);
+                        $subtotal = $data["tipo_documento"] != "39" ? $line_total : ($line_total / 1.19);
 
                     }else{
-                        $data["orden_detalle"][$indice]["precio"] = $order->get_item_total($item);
-                        $data["orden_detalle"][$indice]["subtotal"] = $order->get_line_total($item);
+
+                        $precio = $data["tipo_documento"] != "39" ? ($item_total / 1.19)  : $item_total;
+                        $subtotal = $data["tipo_documento"] != "39" ? ($line_total / 1.19)  : $line_total;
+
                     }
 
+
+                    $data["orden_detalle"][$indice]["precio"] = $precio;
+                    $data["orden_detalle"][$indice]["subtotal"] = $subtotal;
                     $data["orden_detalle"][$indice]["codigo_comercial"] = $producto->get_sku();
                     $data["orden_detalle"][$indice]["nombre"] = $item['name'];
                     $data["orden_detalle"][$indice]["cantidad"] = $item['qty'];

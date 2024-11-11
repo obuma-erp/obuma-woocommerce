@@ -265,12 +265,12 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 
 <tr class="form-field form-required">
-					<th><label>PRECIO A COPIAR DESDE OBUMA</label></th>
+					<th><label>PRECIO A UTILIZAR</label></th>
 					<td>
 				<input type="radio" value="0" name="sincronizar_precio" class="form-control" id="sincronizar_precio" <?php if(get_option("sincronizar_precio") == 0){ echo "checked";} ?>> Bruto
 				<input type="radio" name="sincronizar_precio" class="form-control" id="sincronizar_precio" value="1" <?php if(get_option("sincronizar_precio") == 1){ echo "checked";} ?>> Neto
 				<br>
-				<em style='color:#e74c3c;font-size: 0.8em;'>Permite seleccionar si se trae el precio bruto o el precio neto de los productos de OBUMA</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>Permite seleccionar  con qu&eacute; precio ser&aacute;n sincronizados los precios de productos  (La opción seleccionada tambi&eacute;n se utilizar&aacute; en los precios de productos enviados en los documentos emitidos)</em>
 				
 
 			</td>
