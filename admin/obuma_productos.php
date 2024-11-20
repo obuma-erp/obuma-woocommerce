@@ -152,8 +152,9 @@ if($cantidad_paginas > 0){
 					}
 
 
-					$wpdb->query($wpdb->prepare("INSERT INTO ".$wpdb->prefix."wc_product_meta_lookup VALUES(%d,%s,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%s,%s)",$post_id,$producto_codigo_comercial,0,0,0,0,1,0,'instock',0,0,0,'taxable',''));
-		
+					$result_meta_lookup  = $wpdb->query($wpdb->prepare("INSERT INTO ".$wpdb->prefix."wc_product_meta_lookup VALUES(%d,%s,%d,%d,%d,%d,%d,%d,%s,%d,%d,%d,%s,%s)",$post_id,$producto_codigo_comercial,0,0,0,0,1,0,'instock',0,0,0,'taxable',''));
+					
+					$resumen["resumen"][$indice]["meta_lookup"] = $result_meta_lookup;
 					$resumen["resumen"][$indice]["name"] = $data["producto_nombre"];
 					$resumen["resumen"][$indice]["action"] = "agregado";
 					$indice++;
