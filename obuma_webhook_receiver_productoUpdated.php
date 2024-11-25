@@ -47,6 +47,7 @@ if ($generatedSignature !== $headerSignature) {
 	$producto_nombre = trim($data["producto_nombre"]);
 	$producto_categoria = trim($data["producto_categoria"]);
 	$producto_descripcion = trim($data["producto_descripcion"]);
+	$producto_descripcion_larga = trim($data["producto_descripcion_larga"]);
 
 	$result = [];
 
@@ -61,7 +62,8 @@ if ($generatedSignature !== $headerSignature) {
 				$my_post = array(
 				'ID' =>  $existe[0]->ID,
 				'post_title'    => $producto_nombre,
-				'post_content'  => $producto_descripcion
+				'post_content' => $producto_descripcion_larga,
+				'post_excerpt' => $producto_descripcion,
 				);
 
 				wp_update_post($my_post);

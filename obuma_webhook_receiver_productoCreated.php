@@ -48,7 +48,7 @@ if ($generatedSignature !== $headerSignature) {
 	$producto_nombre = trim($data["producto_nombre"]);
 	$producto_categoria = trim($data["producto_categoria"]);
 	$producto_descripcion = trim($data["producto_descripcion"]);
-
+	$producto_descripcion_larga = trim($data["producto_descripcion_larga"]);
 	$result = [];
 
 	if(isset($producto_codigo_comercial ) && !empty($producto_codigo_comercial) &&  !empty($producto_nombre)){
@@ -64,7 +64,8 @@ if ($generatedSignature !== $headerSignature) {
 				$post_id = wp_insert_post(array(
 				        'post_title' => $producto_nombre,
 				        'post_type' => 'product', 
-				        'post_content' => $producto_descripcion,
+				        'post_content' => $producto_descripcion_larga,
+						'post_excerpt' => $producto_descripcion,
 				        'post_status' => 'publish'
 		    			));
 		    			

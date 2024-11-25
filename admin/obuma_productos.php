@@ -53,6 +53,7 @@ if($cantidad_paginas > 0){
 
 		$producto_descripcion = trim($data["producto_descripcion"]);
 
+		$producto_descripcion_larga = trim($data["producto_descripcion_larga"]);
 
 		if(isset($producto_codigo_comercial ) && !empty($producto_codigo_comercial) && isset($producto_nombre) &&  !empty($producto_nombre)){
 				
@@ -63,7 +64,8 @@ if($cantidad_paginas > 0){
 					$my_post = array(
 					'ID' =>  $existe[0]->ID,
 				   	'post_title'    => $producto_nombre,
-				  	'post_content'  => $producto_descripcion
+				  	'post_content' => $producto_descripcion_larga,
+					'post_excerpt' => $producto_descripcion,
 					);
 
 					wp_update_post($my_post);
@@ -115,7 +117,8 @@ if($cantidad_paginas > 0){
 					$post_id = wp_insert_post(array(
 			        'post_title' => $producto_nombre,
 			        'post_type' => 'product', 
-			        'post_content' => $producto_descripcion,
+			        'post_content' => $producto_descripcion_larga,
+					'post_excerpt' => $producto_descripcion,
 			        'post_status' => 'publish'
 	    			));
 	    			
