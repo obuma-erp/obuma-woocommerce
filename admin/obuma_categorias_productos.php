@@ -3,6 +3,8 @@
 require_once "obuma_conector.php";
 require_once "functions.php";
 
+$productos_categorias_sincronizar = get_option("productos_categorias_sincronizar");
+
 $resumen = array();
 $resumen["resumen"] = []; 
 $log = array();
@@ -15,7 +17,13 @@ $pagina = obtener_numero_pagina($_POST["pagina"]);
 
 $url = set_url()."productosCategorias.list.json";
 
-$json = ObumaConector::get($url."?page=".$pagina,get_option("api_key"));
+$parameters = "?page=".$pagina;
+if(isset($productos_categorias_sincronizar) && (int)$productos_categorias_sincronizar == 1){
+	$parameters .= "&activo_web=1";
+}
+
+
+$json = ObumaConector::get($url.$parameters,get_option("api_key"));
 
 $json = json_encode($json, true);
 $json = json_decode($json, true);

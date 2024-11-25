@@ -58,8 +58,9 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 			    update_option('enviar_ventas_obuma',$_POST["enviar_ventas_obuma"]);
 			    update_option('cambiar_a_completado',$_POST["cambiar_a_completado"]);
 			    update_option('sincronizar_precio',$_POST["sincronizar_precio"]);
+				update_option('productos_categorias_sincronizar',$_POST["productos_categorias_sincronizar"]);
 			    update_option('seleccionar_taxonomias',trim(trim($_POST["seleccionar_taxonomias"]),","));
-
+				
 
 				echo '<div id="message" class="notice notice-success"><p><strong>Todos los datos fueron guardados.</strong></p></div>';
 				} 
@@ -275,6 +276,18 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 			</td>
 				</tr>
+
+<tr class="form-field form-required">
+					<th><label>PRODUCTOS Y CATEGOR&Iacute;AS A SINCRONIZAR</label></th>
+					<td>
+				<input type="radio" value="0" name="productos_categorias_sincronizar" class="form-control" id="productos_categorias_sincronizar" <?php if(get_option("productos_categorias_sincronizar") == 0){ echo "checked";} ?>> Todos
+				<input type="radio" name="productos_categorias_sincronizar" class="form-control" id="productos_categorias_sincronizar" value="1" <?php if(get_option("productos_categorias_sincronizar") == 1){ echo "checked";} ?>> Activos en web
+				<br>
+				<em style='color:#e74c3c;font-size: 0.8em;'>Al seleccionar "Activos en web" solo se tomarán en cuenta los productos y categorías que en OBUMA tienen habilitada la opción  'Mostrar en la web'</em>
+				
+
+			</td>
+</tr>
 
 <tr class="form-field form-required">
 					<th><label>ELEGIR TAXONOM&Iacute;AS</label></th>

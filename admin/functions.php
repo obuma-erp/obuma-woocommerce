@@ -124,7 +124,8 @@ function is_image($image){
 
 
 function verificar_categorias_seleccionadas($url,$categoria_seleccionada,$nombre,$bodega = null,$lista_precio = null){
-    global $pagina;
+    global $pagina,$productos_categorias_sincronizar;
+    
     $url_final = "";
 
     if(!isset($categoria_seleccionada)){ 
@@ -150,8 +151,12 @@ function verificar_categorias_seleccionadas($url,$categoria_seleccionada,$nombre
     if(trim($nombre) == "productos"){
 
         $url_final .= "&activo=1";
-    }
 
+        if(isset($productos_categorias_sincronizar) && (int)$productos_categorias_sincronizar == 1){
+            $url_final .= "&activo_web=1";
+        }
+
+    }
 
 
     if(trim($nombre) == "precios"){

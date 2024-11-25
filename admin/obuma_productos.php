@@ -3,6 +3,8 @@
 require_once "obuma_conector.php";
 require_once "functions.php";
 
+$productos_categorias_sincronizar = get_option("productos_categorias_sincronizar");
+
 $resumen = array();
 $resumen["resumen"] = []; 
 $indice = 0;
@@ -16,6 +18,7 @@ $pagina = obtener_numero_pagina($_POST["pagina"]);
 
 $url = set_url()."productos.list.json";
 $json = verificar_categorias_seleccionadas($url,$_POST["categorias_seleccionadas"],"productos");
+
 
 
 
@@ -39,10 +42,15 @@ $log_synchronization_result = "";
 
 if($cantidad_paginas > 0){
 	foreach ($data_productos as $data) {
+
 		$producto_id = trim($data["producto_id"]);
+
 		$producto_codigo_comercial = trim($data["producto_codigo_comercial"]);
+
 		$producto_nombre = trim($data["producto_nombre"]);
+
 		$producto_categoria = trim($data["producto_categoria"]);
+
 		$producto_descripcion = trim($data["producto_descripcion"]);
 
 

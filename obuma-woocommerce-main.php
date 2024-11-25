@@ -74,7 +74,7 @@ function activar(){
     add_option('enviar_ventas_obuma',0,'','yes');
     add_option('cambiar_a_completado',0,'','yes');
     add_option('sincronizar_precio',0,'','yes');
-
+    add_option('productos_categorias_sincronizar',0,'','yes');
     add_option('seleccionar_taxonomias',"","",'yes');
 
     add_option('update_comunas_date',"","",'yes');
