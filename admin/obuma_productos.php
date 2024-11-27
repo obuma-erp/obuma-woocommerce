@@ -3,6 +3,7 @@
 require_once "obuma_conector.php";
 require_once "functions.php";
 
+
 $productos_categorias_sincronizar = get_option("productos_categorias_sincronizar");
 
 $resumen = array();
@@ -17,7 +18,8 @@ $sqls = array();
 $pagina = obtener_numero_pagina($_POST["pagina"]);
 
 $url = set_url()."productos.list.json";
-$json = verificar_categorias_seleccionadas($url,$_POST["categorias_seleccionadas"],"productos");
+
+$json = verificar_categorias_seleccionadas($url,$_POST["categorias_seleccionadas"],"productos",null,null,$productos_categorias_sincronizar);
 
 
 
