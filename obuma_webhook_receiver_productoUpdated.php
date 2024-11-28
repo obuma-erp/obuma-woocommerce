@@ -47,7 +47,7 @@ if ($generatedSignature !== $headerSignature) {
 	$producto_nombre = trim($data["producto_nombre"]);
 	$producto_categoria = trim($data["producto_categoria"]);
 	$producto_descripcion = trim($data["producto_descripcion"]);
-	$producto_descripcion_larga = trim($data["producto_descripcion_larga"]);
+	$producto_descripcion_larga = html_entity_decode($data["producto_descripcion_larga"]);
 
 	$result = [];
 

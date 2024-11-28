@@ -43,6 +43,7 @@ $log_synchronization_result = "";
 
 
 if($cantidad_paginas > 0){
+	
 	foreach ($data_productos as $data) {
 
 		$producto_id = trim($data["producto_id"]);
@@ -55,7 +56,7 @@ if($cantidad_paginas > 0){
 
 		$producto_descripcion = trim($data["producto_descripcion"]);
 
-		$producto_descripcion_larga = trim($data["producto_descripcion_larga"]);
+		$producto_descripcion_larga = html_entity_decode($data["producto_descripcion_larga"]);
 
 		if(isset($producto_codigo_comercial ) && !empty($producto_codigo_comercial) && isset($producto_nombre) &&  !empty($producto_nombre)){
 				
