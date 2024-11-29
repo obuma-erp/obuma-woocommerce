@@ -61,7 +61,7 @@ if(isset($data_imagenes_productos) && $cantidad_paginas > 0){
 
 					$imagen_product = end($imagen_explode);
 
-					$existe_imagen = $wpdb->get_results("SELECT ID,post_parent FROM  ".$wpdb->prefix."posts WHERE post_title='".sanitize_file_name($imagen_product)."' AND post_type='attachment' LIMIT 1");
+					$existe_imagen = $wpdb->get_results("SELECT ID,post_parent FROM  ".$wpdb->prefix."posts WHERE post_title='".sanitize_file_name($imagen_product)."' AND post_type='attachment' AND post_parent='".$existe_product[0]->ID."' LIMIT 1");
 
 					if(count($existe_imagen) == 0){
 
