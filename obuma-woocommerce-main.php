@@ -530,14 +530,21 @@ function call_order_status_changed($order_id,$old,$new){
 
                     if (get_option("sincronizar_precio") == 1) {
 
-                        $precio = $data["tipo_documento"] != "39" ? $item_total : ($item_total / 1.19);
-                        $subtotal = $data["tipo_documento"] != "39" ? $line_total : ($line_total / 1.19);
-
+                        // trabaja con precios netos en la web
+                        // - Se agrega el IVA a las boletas (cod 39), al precio unitario y subtotal
+                
+                        $precio = $data["tipo_documento"] == "39" ? ($item_total * 1.19) : $item_total;
+                        $subtotal = $data["tipo_documento"] == "39" ? ($line_total * 1.19) : $line_total;
+                        
+                
                     }else{
-
-                        $precio = $data["tipo_documento"] != "39" ? ($item_total / 1.19)  : $item_total;
-                        $subtotal = $data["tipo_documento"] != "39" ? ($line_total / 1.19)  : $line_total;
-
+                
+                        // trabaja con precios brutos en la web
+                        // - se le quita el iva a las boletas (cod 39), al precio unitario y subtotal
+                
+                        $precio = $data["tipo_documento"] == "39" ? $item_total : ($item_total / 1.19);
+                        $subtotal = $data["tipo_documento"] == "39" ? $line_total : ($line_total / 1.19);
+                
                     }
 
 
