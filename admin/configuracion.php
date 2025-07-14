@@ -57,6 +57,10 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 			    
 			    update_option('enviar_ventas_obuma',$_POST["enviar_ventas_obuma"]);
 			    update_option('cambiar_a_completado',$_POST["cambiar_a_completado"]);
+
+				update_option("product_info_sync", json_encode($_POST["product_info_sync"] ?? []));
+
+
 			    update_option('sincronizar_precio',$_POST["sincronizar_precio"]);
 				update_option('productos_categorias_sincronizar',$_POST["productos_categorias_sincronizar"]);
 			    update_option('seleccionar_taxonomias',trim(trim($_POST["seleccionar_taxonomias"]),","));
@@ -261,7 +265,70 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 			</td>
 </tr>
+<tr class="form-field form-required">
+	
+<th><label>INFORMACIÓN A SINCRONIZAR</label></th>
+<td>
 
+<?php
+$sync_options = json_decode(get_option("product_info_sync"), true);
+
+if (!is_array($sync_options)) {
+    $sync_options = [
+        'descripcion_corta',
+        'descripcion_larga',
+        'ancho',
+        'alto',
+        'largo',
+        'peso',
+    ];
+}
+?>
+
+
+
+<label>
+    <input type="checkbox" name="product_info_sync[]" value="descripcion_corta"
+        <?php if (in_array('descripcion_corta', $sync_options ?? [])) echo 'checked'; ?>>
+    Descripción corta
+</label><br>
+
+<label>
+    <input type="checkbox" name="product_info_sync[]" value="descripcion_larga"
+        <?php if (in_array('descripcion_larga', $sync_options ?? [])) echo 'checked'; ?>>
+    Descripción larga
+</label><br>
+
+<label>
+    <input type="checkbox" name="product_info_sync[]" value="ancho"
+        <?php if (in_array('ancho', $sync_options ?? [])) echo 'checked'; ?>>
+    Ancho
+</label><br>
+
+<label>
+    <input type="checkbox" name="product_info_sync[]" value="alto"
+        <?php if (in_array('alto', $sync_options ?? [])) echo 'checked'; ?>>
+    Alto
+</label><br>
+
+<label>
+    <input type="checkbox" name="product_info_sync[]" value="largo"
+        <?php if (in_array('largo', $sync_options ?? [])) echo 'checked'; ?>>
+    Largo
+</label><br>
+
+<label>
+    <input type="checkbox" name="product_info_sync[]" value="peso"
+        <?php if (in_array('peso', $sync_options ?? [])) echo 'checked'; ?>>
+    Peso
+</label><br>
+
+
+				<em style='color:#e74c3c;font-size: 0.8em;'>Permite seleccionar  qu&eacute; informaci&oacute;n de los productos se va a utilizar al realizar una sincronizaci&oacute;n.</em>
+				
+
+			</td>
+</tr>
 
 
 

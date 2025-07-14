@@ -55,27 +55,42 @@ if ($generatedSignature !== $headerSignature) {
 				
 		$existe = existe_producto_sku($producto_codigo_comercial);
 
+		$opciones_activas = json_decode(get_option("product_info_sync"), true) ?? [];
+
 		if ($existe !== false) {
 
 			try {
 
-				$my_post = array(
-				'ID' =>  $existe[0]->ID,
-				'post_title'    => $producto_nombre,
-				'post_content' => $producto_descripcion_larga,
-				'post_excerpt' => $producto_descripcion,
-				);
+				// Construimos el array solo con los campos permitidos
+				$my_post = array('ID' => $existe[0]->ID);
+
+					
+				$my_post['post_title'] = $producto_nombre;
+					
+				if (in_array('descripcion_larga', $opciones_activas)) {
+					$my_post['post_content'] = $producto_descripcion_larga;
+				}
+				if (in_array('descripcion_corta', $opciones_activas)) {
+					$my_post['post_excerpt'] = $producto_descripcion;
+				}
 
 				wp_update_post($my_post);
 
-				update_post_meta($existe[0]->ID, '_width', $data["producto_ancho"]);
-					
-				update_post_meta($existe[0]->ID, '_height', $data["producto_alto"]);
-					
-				update_post_meta($existe[0]->ID, '_length', $data["producto_largo"]);
+				// Meta campos
+				if (in_array('ancho', $opciones_activas)) {
+					update_post_meta($existe[0]->ID, '_width', $data["producto_ancho"]);
+				}
+				if (in_array('alto', $opciones_activas)) {
+					update_post_meta($existe[0]->ID, '_height', $data["producto_alto"]);
+				}
+				if (in_array('largo', $opciones_activas)) {
+					update_post_meta($existe[0]->ID, '_length', $data["producto_largo"]);
+				}
+				if (in_array('peso', $opciones_activas)) {
+					update_post_meta($existe[0]->ID, '_weight', $data["producto_peso_fisico"]);
+				}
 
-				update_post_meta($existe[0]->ID, '_weight', $data["producto_peso_fisico"]);
-						
+
 				$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."posts SET obuma_id_product=%d WHERE ID=%d",$producto_id,$existe[0]->ID));
 
 				$categoria_existe = existe_categoria_vincular($producto_categoria);

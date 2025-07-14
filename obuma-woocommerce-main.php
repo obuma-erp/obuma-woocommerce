@@ -73,6 +73,7 @@ function activar(){
     add_option('nota_venta_segundo_plano',0,'','yes');
     add_option('enviar_ventas_obuma',0,'','yes');
     add_option('cambiar_a_completado',0,'','yes');
+    add_option('product_info_sync','["descripcion_corta","descripcion_larga","ancho","alto","largo","peso"]',"","yes");
     add_option('sincronizar_precio',0,'','yes');
     add_option('productos_categorias_sincronizar',0,'','yes');
     add_option('seleccionar_taxonomias',"","",'yes');
@@ -412,7 +413,9 @@ function call_order_status_changed($order_id,$old,$new){
                 $data["telefono"] = $meta_billing_phone;
 
                 if($obuma_tipo_documento_value == "39"){
+
                     $data["razon_social"] = $meta_billing_first_name . " " . $meta_billing_last_name;
+                    
                 }else{
                     if(empty(trim($meta_billing_company))){
                         $data["razon_social"] = $meta_billing_first_name . " " . $meta_billing_last_name;

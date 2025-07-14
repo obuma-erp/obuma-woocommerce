@@ -41,6 +41,7 @@ if ($generatedSignature !== $headerSignature) {
 	exit;
 
 } else {
+
 	echo '<br>Signature ok...';
 			
 	$producto_id = trim($data["producto_id"]);
@@ -55,22 +56,32 @@ if ($generatedSignature !== $headerSignature) {
 
 		$existe = existe_producto_sku($producto_codigo_comercial);
 
+		$opciones_activas = json_decode(get_option("product_info_sync"), true) ?? [];
+		
 		if ($existe == false) {
-
-			
 
 			try{
 
-				$post_id = wp_insert_post(array(
-				        'post_title' => $producto_nombre,
-				        'post_type' => 'product', 
-				        'post_content' => $producto_descripcion_larga,
-						'post_excerpt' => $producto_descripcion,
-				        'post_status' => 'publish'
-		    			));
+				$args = [
+						'post_type'    => 'product',
+						'post_status'  => 'publish',
+				];
+					
+				$args['post_title'] = $producto_nombre;
+					
+				if (in_array('descripcion_larga', $opciones_activas)) {
+					$args['post_content'] = $producto_descripcion_larga;
+				}
+				
+				if (in_array('descripcion_corta', $opciones_activas)) {
+					$args['post_excerpt'] = $producto_descripcion;
+				}
+
+				$post_id = wp_insert_post($args);
 		    			
 				
 				$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."posts SET obuma_id_product=%d WHERE ID=%d",$producto_id,$post_id));
+
 				$agregados++;
 		    					
 				update_post_meta( $post_id, '_visibility', 'visible' );
@@ -82,10 +93,18 @@ if ($generatedSignature !== $headerSignature) {
 				update_post_meta( $post_id, '_sale_price', 0 );
 				update_post_meta( $post_id, '_purchase_note', '' );
 				update_post_meta( $post_id, '_featured', 'no' );
-				update_post_meta( $post_id, '_weight', $data["producto_peso_fisico"] );
-				update_post_meta( $post_id, '_length', $data["producto_largo"] );
-				update_post_meta( $post_id, '_width', $data["producto_ancho"]);
-				update_post_meta( $post_id, '_height',$data["producto_alto"]);
+				if (in_array('peso', $opciones_activas)) {
+					update_post_meta($post_id, '_weight', $data["producto_peso_fisico"]);
+				}
+				if (in_array('largo', $opciones_activas)) {
+					update_post_meta($post_id, '_length', $data["producto_largo"]);
+				}
+				if (in_array('ancho', $opciones_activas)) {
+					update_post_meta($post_id, '_width', $data["producto_ancho"]);
+				}
+				if (in_array('alto', $opciones_activas)) {
+					update_post_meta($post_id, '_height', $data["producto_alto"]);
+				}
 				update_post_meta( $post_id, '_sku', $producto_codigo_comercial);
 				update_post_meta( $post_id, '_product_attributes', array() );
 				update_post_meta( $post_id, '_sale_price_dates_from', '' );
