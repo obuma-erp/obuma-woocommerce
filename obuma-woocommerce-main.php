@@ -613,17 +613,6 @@ function call_order_status_changed($order_id,$old,$new){
 
                             $note = 'La orden no fue registrada en OBUMA : '. $error->message;
 
-                            if($error->code == 111){
-                                $note = 'El RUT enviado a OBUMA es incorrecto!';
-                            }
-
-
-                            if($error->code == 112){
-
-                                $note = 'No hay folios disponibles en OBUMA!';
-                            }
-                            
-
                             $order->add_order_note( $note );
 
                             $order->save();
