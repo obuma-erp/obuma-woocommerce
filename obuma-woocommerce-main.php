@@ -611,7 +611,7 @@ function call_order_status_changed($order_id,$old,$new){
 
                             $order->update_status('on-hold');
 
-                            $note = 'La orden no fue registrada en OBUMA : Codigo de error '. $error->error . " -> " . $error->message;
+                            $note = 'La orden no fue registrada en OBUMA : Codigo de error '. $error->code . " -> " . $error->message;
 
                             $order->add_order_note( $note );
 
