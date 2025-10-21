@@ -55,8 +55,12 @@ if($cantidad_paginas > 0){
 		$producto_categoria = trim($data["producto_categoria"]);
 
 		$producto_descripcion = trim($data["producto_descripcion"]);
-
+		
+		$producto_descripcion = str_replace(["\r\n", "\n", "\r"], "", $producto_descripcion);
+		
 		$producto_descripcion_larga = html_entity_decode($data["producto_descripcion_larga"]);
+		
+		$producto_descripcion_larga = str_replace(["\r\n", "\n", "\r"], "", $producto_descripcion_larga);
 
 		if(isset($producto_codigo_comercial ) && !empty($producto_codigo_comercial) && isset($producto_nombre) &&  !empty($producto_nombre)){
 				
