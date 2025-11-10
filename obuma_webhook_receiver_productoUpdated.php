@@ -49,7 +49,11 @@ if ($generatedSignature !== $headerSignature) {
 	$producto_descripcion = trim($data["producto_descripcion"]);
 	$producto_descripcion = str_replace(["\r\n", "\n", "\r"], "", $producto_descripcion);
 	$producto_descripcion_larga = html_entity_decode($data["producto_descripcion_larga"]);
-	$producto_descripcion_larga = str_replace(["\r\n", "\n", "\r"], "", $producto_descripcion_larga);
+	$producto_descripcion_larga = str_replace(
+		["\r\n", "\n", "\r", "\\r", "\\n"],
+		"",
+		$producto_descripcion_larga
+	);
 
 	$result = [];
 
