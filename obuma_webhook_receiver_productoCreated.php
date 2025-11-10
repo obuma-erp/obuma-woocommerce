@@ -17,7 +17,7 @@ $eventType = $decodedBody['eventType'];
 $eventDate = $decodedBody['eventDate'];
 
 $data = $decodedBody['eventData'];
-$data = stripslashes($data);
+
 $data = json_decode($data, true);
 
 echo '<br>eventId : '.$eventId;
