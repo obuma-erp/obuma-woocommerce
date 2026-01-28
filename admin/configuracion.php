@@ -180,7 +180,7 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 				<input type="radio" value="0" name="enviar_ventas_obuma" class="form-control" id="enviar_ventas_obuma" <?php if(get_option("enviar_ventas_obuma") == 0){ echo "checked";} ?>> No 
 				<input type="radio" name="enviar_ventas_obuma" class="form-control" id="enviar_ventas_obuma" value="1" <?php if(get_option("enviar_ventas_obuma") == 1){ echo "checked";} ?>> Si 
 				<br>
-				<em style='color:#e74c3c;font-size: 0.8em;'>Permite que las &oacute;rdenes ingresen a OBUMA</em>
+				<em style='color:#e74c3c;font-size: 0.8em;'>Permite que las &oacute;rdenes generadas en Woocommerce se envien a OBUMA</em>
 				
 
 			</td>
