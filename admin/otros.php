@@ -16,7 +16,7 @@
 			<ul>
 				<li>Versi&oacute;n  de WooCommerce instalada : <code><?php echo WC_VERSION; ?></code></li>
 				<li>Versi&oacute;n  de PHP instalada : <code><?php echo phpversion(); ?></code></li>
-				<li>Versi&oacute;n de Obuma Sync : <code>1.0.1</code></li>
+				<li>Versi&oacute;n de Obuma Sync : <code><?php echo get_option("obuma_plugin_version"); ?></code></li>
 				<li>Requisitos m&iacute;nimos de Obuma Sync  : <code>Woocommerce 5.0</code>  &oacute; superior , <code>PHP 5.6</code> &oacute; superior</li>
 
 			</ul>
@@ -74,9 +74,6 @@
 
 
 
-
-			
-			<?php// echo __FILE__; ?>
 
 		</div>
 

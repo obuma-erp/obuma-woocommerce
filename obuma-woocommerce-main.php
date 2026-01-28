@@ -44,6 +44,7 @@ if (get_option("enviar_ventas_obuma") == 1) {
         add_action('woocommerce_payment_complete', 'change_to_completed');
     }
 
+
 }
 
 
@@ -72,6 +73,9 @@ function activar(){
     add_option('tipo_documento',"[]",'','yes');
     add_option('nota_venta_segundo_plano',0,'','yes');
     add_option('enviar_ventas_obuma',0,'','yes');
+
+    add_option('estado_enviar_ventas_obuma','completed','','yes');
+
     add_option('cambiar_a_completado',0,'','yes');
     add_option('product_info_sync','["descripcion_corta","descripcion_larga","ancho","alto","largo","peso"]',"","yes");
     add_option('sincronizar_precio',0,'','yes');
@@ -81,7 +85,7 @@ function activar(){
     add_option('update_comunas_date',"","",'yes');
     add_option('update_limpiar_registros_date',"","",'yes');
     
-    add_option('obuma_plugin_version',"1.0.1","",'yes');
+    add_option('obuma_plugin_version',"1.0.8","",'yes');
 }
 
 
@@ -307,8 +311,9 @@ function save_custom_billingt_fields( $order, $data ) {
 function call_order_status_changed($order_id,$old,$new){
     global $wpdb;
 
-    
-    if (strtolower($new) == "completed") {
+    $estado_objetivo = get_option('estado_enviar_ventas_obuma', 'completed');
+
+    if (strtolower($new) == $estado_objetivo) {
         $data = array();
         // enviar_orden_venta($order->id);
         $id = $order_id;
