@@ -120,7 +120,8 @@ function enviar_orden_venta($data){
     'venta_fecha'                 => date("Y-m-d"),                             // Fecha actual
     'venta_sucursal'              => $data["sucursal"],                         // Definido en la configuracion del plugin
     'venta_bodega'                => $data["bodega"],                           // Definido en la configuracion del plugin
-    'venta_lista_precio'          => $data["lista_precio"],                     // Definido en la configuracion del plugin
+    'venta_lista_precio'          => $data["lista_precio"],
+    'venta_centro_costo'          => $data["centro_costo"],                        // Definido en la configuracion del plugin
     'venta_usuario'               => $data["usuario"],                          // Definido en la configuracion del plugin
     'venta_vendedor'              => $data["vendedor"],                         // Definido en la configuracion del plugin
     'venta_canal'                 => $data["canal_venta"],                      // Definido en la configuracion del plugin

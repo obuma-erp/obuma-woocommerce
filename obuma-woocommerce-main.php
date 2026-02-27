@@ -62,6 +62,7 @@ function activar(){
     add_option('usuario',"",'','yes');
     add_option('canal_venta',"",'','yes');
     add_option('lista_precio',"",'','yes');
+    add_option('centro_costo',"",'','yes');
     add_option('codigo_forma_pago',"",'','yes');
 
     add_option('rebajar_stock',0,'','yes');
@@ -470,6 +471,7 @@ function call_order_status_changed($order_id,$old,$new){
                 $data["canal_venta"] = get_option("canal_venta");
                 $data["vendedor"] = get_option("vendedor");
                 $data["lista_precio"] = get_option("lista_precio");
+                $data["centro_costo"] = get_option("centro_costo");
                 $data["rebajar_stock"] = get_option("rebajar_stock");
                 $data["registrar_contabilidad"] = get_option("registrar_contabilidad");
                 $data["enviar_email_cliente"] = get_option("enviar_email_cliente");

@@ -36,6 +36,9 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 			    update_option('usuario',trim($_POST["usuario"]));
 			    update_option('canal_venta',trim($_POST["canal_venta"]));
 			    update_option('lista_precio',trim($_POST["lista_precio"]));
+
+				update_option('centro_costo',trim($_POST["centro_costo"]));
+
 			    update_option('codigo_forma_pago',trim($_POST["codigo_forma_pago"]));
 
 			    update_option('rebajar_stock',$_POST["rebajar_stock"]);
@@ -157,10 +160,19 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 
 				<tr class="form-field form-required">
-					<th><label>LISTA PRECIO</label></th>
+					<th><label>LISTA DE PRECIO</label></th>
 					<td width="40%;">
 				<input type="text" name="lista_precio" class="form-control" id="lista_precio" placeholder="Ingrese el c&oacute;digo de la lista de precio" value="<?php echo get_option("lista_precio"); ?>">
 				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo de la lista de precio que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
+
+				</td>
+				</tr>
+
+				<tr class="form-field form-required">
+					<th><label>CENTRO DE COSTO</label></th>
+					<td width="40%;">
+				<input type="text" name="centro_costo" class="form-control" id="centro_costo" placeholder="Ingrese el c&oacute;digo del Centro de Costo" value="<?php echo get_option("centro_costo"); ?>">
+				<em style='color:#e74c3c;font-size: 0.8em;'>C&oacute;digo del centro de costo que desea vincular a las ventas por woocommerce (Este valor se obtiene en OBUMA)</em>
 
 				</td>
 				</tr>
