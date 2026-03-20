@@ -453,20 +453,12 @@ function call_order_status_changed($order_id,$old,$new){
                 $customer_note = html_entity_decode($customer_note);
 
 
-                //Obtenemos el valor de la bodega asociada a un pedido mediante un campo personalizado
-
-                $bodega_pedido_campo_personalizado = null;
-
-                if(get_option("cambiar_a_completado") == 0){
-
-                    $bodega_pedido_campo_personalizado = $meta_obuma_bodega;
-
-                }
-                
-
                 $data["observacion"] =  $customer_note;
                 $data["sucursal"] = get_option("sucursal");
-                $data["bodega"] =  (isset($bodega_pedido_campo_personalizado) && !empty($bodega_pedido_campo_personalizado)) ? $bodega_pedido_campo_personalizado : get_option("bodega");
+
+                //Si antes de cambiar de estado de la orden  existe el metadato bodega_obuma, entonces ese valor será enviado a OBUMA, de lo contrario se utilizará el valor establecido en la configuración del plugin
+                $data["bodega"] = (!empty($meta_obuma_bodega) && $meta_obuma_bodega != 0) ? $meta_obuma_bodega : get_option("bodega");
+
                 $data["usuario"] = get_option("usuario");
                 $data["canal_venta"] = get_option("canal_venta");
                 $data["vendedor"] = get_option("vendedor");
