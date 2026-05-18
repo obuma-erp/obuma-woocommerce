@@ -86,6 +86,12 @@ function activar(){
     add_option('update_comunas_date',"","",'yes');
     add_option('update_limpiar_registros_date',"","",'yes');
     
+    //Notificaciones
+    add_option('venta_enviar_notificacion_sucursal',0,'','yes');
+    add_option('venta_enviar_notificacion_mensaje',"",'','yes');
+    
+
+
     add_option('obuma_plugin_version',"1.0.8","",'yes');
 }
 
@@ -469,6 +475,13 @@ function call_order_status_changed($order_id,$old,$new){
                 $data["enviar_email_cliente"] = get_option("enviar_email_cliente");
                 $data["registrar_cobro"] = get_option("registrar_cobro");
                 $data["cliente_actualizar_datos"] = get_option("cliente_actualizar_datos");
+
+
+                //Notificaciones
+
+                $data["venta_enviar_notificacion_sucursal"] = get_option("venta_enviar_notificacion_sucursal");
+                $data["venta_enviar_notificacion_mensaje"] = get_option("venta_enviar_notificacion_mensaje");
+                
 
                 $payment_method = $order->get_payment_method_title();
 

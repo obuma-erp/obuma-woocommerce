@@ -148,7 +148,9 @@ function enviar_orden_venta($data){
     'cliente_region'              => $data["region"],                           //Obtenido del checkout de la tienda
     'cliente_giro'                => $data["giro_comercial"],                   //Obtenido del checkout de la tienda
     'cliente_email'               => $data["email"],                            //Obtenido del checkout de la tienda
-    'cliente_telefono'            => $data["telefono"]                          //Obtenido del checkout de la tienda
+    'cliente_telefono'            => $data["telefono"],                          //Obtenido del checkout de la tienda
+    'venta_enviar_notificacion_sucursal'            => $data["venta_enviar_notificacion_sucursal"],                         //Configuracion para notificaciones
+    'venta_enviar_notificacion_mensaje'            => $data["venta_enviar_notificacion_mensaje"]                          //Configuracion para notificaciones
    
   );
 

@@ -72,6 +72,11 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 			    update_option('seleccionar_taxonomias',trim(trim($_POST["seleccionar_taxonomias"]),","));
 				
 
+
+				update_option('venta_enviar_notificacion_sucursal',$_POST["venta_enviar_notificacion_sucursal"]);
+
+				update_option('venta_enviar_notificacion_mensaje', trim($_POST["venta_enviar_notificacion_mensaje"]));
+
 				echo '<div id="message" class="notice notice-success"><p><strong>Todos los datos fueron guardados.</strong></p></div>';
 				} 
 		?>
@@ -315,6 +320,8 @@ if (! current_user_can ('manage_options')) wp_die (__ ('No tienes suficientes pe
 
 			</td>
 </tr>
+
+
 <tr class="form-field form-required">
 	
 <th><label>INFORMACIÓN A SINCRONIZAR</label></th>
@@ -471,6 +478,26 @@ if (!is_array($sync_options)) {
 
 			</td>
 				</tr>
+
+
+
+				<tr class="form-field form-required">
+    <th><label>ENVIAR NOTIFICACIÓN SUCURSAL</label></th>
+    <td>
+        <input type="radio" value="0" name="venta_enviar_notificacion_sucursal" class="form-control" id="venta_enviar_notificacion_sucursal" <?php if(get_option("venta_enviar_notificacion_sucursal") == 0){ echo "checked";} ?>> No 
+        <input type="radio" name="venta_enviar_notificacion_sucursal" class="form-control" id="venta_enviar_notificacion_sucursal" value="1" <?php if(get_option("venta_enviar_notificacion_sucursal") == 1){ echo "checked";} ?>> Si 
+        <br>
+        <em style='color:#e74c3c;font-size: 0.8em;'>Permite enviar una notificación a la sucursal al registrar la venta en OBUMA</em>
+    </td>
+</tr>
+
+<tr class="form-field form-required">
+    <th><label>MENSAJE DE NOTIFICACIÓN SUCURSAL</label></th>
+    <td width="40%;">
+        <input type="text" name="venta_enviar_notificacion_mensaje" class="form-control" id="venta_enviar_notificacion_mensaje" placeholder="Ingrese el mensaje de notificación" value="<?php echo get_option("venta_enviar_notificacion_mensaje"); ?>">
+        <em style='color:#e74c3c;font-size: 0.8em;'>Mensaje que se enviará a la sucursal al registrar la venta (Ej: Revisar, preparar retiro/entrega)</em>
+    </td>
+</tr>
 
 
 			</table>
