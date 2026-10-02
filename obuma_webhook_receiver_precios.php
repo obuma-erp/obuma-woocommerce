@@ -8,6 +8,8 @@ $requestBody = file_get_contents('php://input');
 
 date_default_timezone_set('America/Santiago');
 
+obuma_webhook_capturar_fatales('Error fatal precio', $requestBody);
+
 $client_secret = get_option("api_key");
 echo '<br>$client_secret : '.$client_secret;
 
@@ -17,9 +19,7 @@ $eventId = $decodedBody['eventId'];
 $eventType = $decodedBody['eventType'];
 $eventDate = $decodedBody['eventDate'];
 
-$data = $decodedBody['eventData'];
-$data = stripslashes($data);
-$data = json_decode($data, true);
+$data = obuma_webhook_event_data($decodedBody);
 	
 echo '<br>eventId : '.$eventId;
 echo '<br>eventType : '.$eventType;
@@ -38,7 +38,13 @@ $generatedSignature = base64_encode($hmac_result);
 echo '<br>signature generated: '.$generatedSignature;
 
 if ($generatedSignature !== $headerSignature) {
-	echo '<br>Error... signature verification failed';	
+	echo '<br>Error... signature verification failed';
+	obuma_webhook_log_error('Error firma precio', array(
+		'message'        => 'La firma recibida no coincide con la generada',
+		'eventId'        => $eventId,
+		'eventDate'      => $eventDate,
+		'firma_recibida' => empty($headerSignature) ? 'vacia' : 'presente',
+	), $requestBody);
 	exit;
 
 } else {
@@ -67,34 +73,43 @@ if ($generatedSignature !== $headerSignature) {
 						$precio_aplicar = $producto_precio_clp_neto;
 				}
 
-				if($id_producto > 0){
+				$producto = ($id_producto > 0) ? wc_get_product($id_producto) : false;
 
-					$producto = wc_get_product($id_producto);
+				if($id_producto > 0 && !$producto){
 
-					$producto->set_regular_price($precio_aplicar);
-					//$producto->set_sale_price($precio_aplicar);
-					//$producto->set_price($precio_aplicar);
-					$producto->save();
+					$result[]["message"] = "No se pudo cargar el producto en woocommerce (ID ".$id_producto.")";
 
 				}else{
-					update_post_meta($pro[0]->ID, '_regular_price', $precio_aplicar);
-					//update_post_meta($pro[0]->ID, '_sale_price', $precio_aplicar);
-					//update_post_meta($pro[0]->ID, '_price', $precio_aplicar);
+
+					if($producto){
+
+						$producto->set_regular_price($precio_aplicar);
+						//$producto->set_sale_price($precio_aplicar);
+						//$producto->set_price($precio_aplicar);
+						$producto->save();
+
+					}else{
+						update_post_meta($pro[0]->ID, '_regular_price', $precio_aplicar);
+						//update_post_meta($pro[0]->ID, '_sale_price', $precio_aplicar);
+						//update_post_meta($pro[0]->ID, '_price', $precio_aplicar);
+					}
+
+
+					//Actualizar precio en tabla wc_product_meta_lookup
+						$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."wc_product_meta_lookup  SET max_price=%d WHERE product_id=%d",$precio_aplicar,$pro[0]->ID));
+
+
+					$result[]["message"] = "Success";
 				}
 
 
-				//Actualizar precio en tabla wc_product_meta_lookup
-					$wpdb->query($wpdb->prepare("UPDATE ".$wpdb->prefix."wc_product_meta_lookup  SET max_price=%d WHERE product_id=%d",$precio_aplicar,$pro[0]->ID));
-
-
-				$result[]["message"] = "Success";
-
-
-			} catch (Exception $e) {
+			} catch (Throwable $e) {
+					// Throwable captura tambien los errores de PHP 8 (TypeError, Error)
 					$result[]["message"] = $e->getMessage();
 					$result[]["code"] = $e->getCode();
 					$result[]["file"] = $e->getFile();
-					
+					$result[]["line"] = $e->getLine();
+
 			}
 
 
@@ -113,11 +128,15 @@ if ($generatedSignature !== $headerSignature) {
 
 
 	$table_obuma_log_webhook = $wpdb->prefix . 'obuma_log_webhook';
-	    				$wpdb->query("INSERT INTO {$table_obuma_log_webhook} 
+	    				$insert_log = $wpdb->query("INSERT INTO {$table_obuma_log_webhook}
 	    								  SET 
 	    								  fecha='".date('Y-m-d')."', 
 	    								  hora='".date('H:i:s')."',
 	    								  peticion='".json_encode($requestBody, JSON_PRETTY_PRINT)."',
 	    								  tipo='Actualizar precio',
 	    								  resultado='".json_encode($result, JSON_PRETTY_PRINT)."'");
+
+	if ($insert_log === false) {
+		obuma_webhook_log_insert_fallido('Error log precio', $requestBody, $result);
+	}
 }

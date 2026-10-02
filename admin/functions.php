@@ -376,3 +376,86 @@ function check_version(){
 
     return $html;
 }
+
+
+//***************************************************************************************************
+// Funciones compartidas por los webhooks: lectura de eventData y registro de errores en el log
+// Todo el registro de diagnostico es a prueba de fallos: nunca debe interrumpir el webhook
+//***************************************************************************************************
+
+// Registra una fila de error en el log de webhook usando $wpdb->insert (escapa los datos)
+if (!function_exists('obuma_webhook_log_error')) {
+	function obuma_webhook_log_error($tipo, $detalle, $peticion = '') {
+		try {
+			global $wpdb;
+			if (!isset($wpdb) || !is_object($wpdb)) {
+				return;
+			}
+
+			$resultado = json_encode($detalle, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR);
+			if ($resultado === false) {
+				$resultado = 'No se pudo codificar el detalle del error';
+			}
+
+			$wpdb->insert(
+				$wpdb->prefix . 'obuma_log_webhook',
+				array(
+					'fecha'     => date('Y-m-d'),
+					'hora'      => date('H:i:s'),
+					'tipo'      => $tipo,
+					'peticion'  => substr((string) $peticion, 0, 2000),
+					'resultado' => substr($resultado, 0, 20000),
+				),
+				array('%s', '%s', '%s', '%s', '%s')
+			);
+		} catch (Throwable $t) {
+			// Nunca interrumpir el webhook por un fallo del registro de diagnostico
+		}
+	}
+}
+
+// Registra en el log los errores fatales de PHP que detengan el webhook
+if (!function_exists('obuma_webhook_capturar_fatales')) {
+	function obuma_webhook_capturar_fatales($tipo, $requestBody) {
+		register_shutdown_function(function () use ($tipo, $requestBody) {
+			$error = error_get_last();
+			$fatales = array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR, E_RECOVERABLE_ERROR);
+
+			if ($error !== null && in_array($error['type'], $fatales, true)) {
+				obuma_webhook_log_error($tipo, array(
+					'message' => substr($error['message'], 0, 5000),
+					'file'    => $error['file'],
+					'line'    => $error['line'],
+				), $requestBody);
+			}
+		});
+	}
+}
+
+// eventData puede llegar como string JSON (formato antiguo) o como objeto JSON
+if (!function_exists('obuma_webhook_event_data')) {
+	function obuma_webhook_event_data($decodedBody, $stripslashes = true) {
+		$data = (is_array($decodedBody) && isset($decodedBody['eventData'])) ? $decodedBody['eventData'] : array();
+
+		if (is_string($data)) {
+			$data = json_decode($stripslashes ? stripslashes($data) : $data, true);
+		}
+
+		return is_array($data) ? $data : array();
+	}
+}
+
+// Registra el detalle cuando el INSERT normal del log falla
+if (!function_exists('obuma_webhook_log_insert_fallido')) {
+	function obuma_webhook_log_insert_fallido($tipo, $requestBody, $result) {
+		global $wpdb;
+
+		obuma_webhook_log_error($tipo, array(
+			'message'         => 'No se pudo guardar el log del webhook',
+			'mysql_error'     => substr((string) $wpdb->last_error, 0, 5000),
+			'largo_peticion'  => strlen((string) json_encode($requestBody, JSON_PRETTY_PRINT)),
+			'largo_resultado' => strlen((string) json_encode($result, JSON_PRETTY_PRINT)),
+			'resultado'       => $result,
+		), $requestBody);
+	}
+}

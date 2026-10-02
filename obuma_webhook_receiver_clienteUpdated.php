@@ -8,6 +8,8 @@ $requestBody = file_get_contents('php://input');
 
 date_default_timezone_set('America/Santiago');
 
+obuma_webhook_capturar_fatales('Error fatal actualizar cliente', $requestBody);
+
 $client_secret = get_option("api_key");
 
 echo '<br>$client_secret : '.$client_secret;
@@ -18,9 +20,7 @@ $eventId = $decodedBody['eventId'];
 $eventType = $decodedBody['eventType'];
 $eventDate = $decodedBody['eventDate'];
 
-$data = $decodedBody['eventData'];
-$data = stripslashes($data);
-$data = json_decode($data, true);
+$data = obuma_webhook_event_data($decodedBody);
 
 echo '<br>eventId : '.$eventId;
 echo '<br>eventType : '.$eventType;
@@ -39,6 +39,12 @@ echo '<br>signature generated: '.$generatedSignature;
 
 if ($generatedSignature !== $headerSignature) {
 	echo '<br>Error... signature verification failed';
+	obuma_webhook_log_error('Error firma actualizar cliente', array(
+		'message'        => 'La firma recibida no coincide con la generada',
+		'eventId'        => $eventId,
+		'eventDate'      => $eventDate,
+		'firma_recibida' => empty($headerSignature) ? 'vacia' : 'presente',
+	), $requestBody);
 	exit;
 
 } else {
@@ -54,7 +60,7 @@ if ($generatedSignature !== $headerSignature) {
 
 		$cliente_existe = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix."users WHERE obuma_id_customer > 0 AND  obuma_id_customer='".$cliente_id."' LIMIT 1");
 
-		if(count($cliente_existe) == 1){
+		if(is_array($cliente_existe) && count($cliente_existe) == 1){
 
 			$result = [];
 
@@ -79,16 +85,32 @@ if ($generatedSignature !== $headerSignature) {
 
 
 			$table_obuma_log_webhook = $wpdb->prefix . 'obuma_log_webhook';
-		    $wpdb->query("INSERT INTO {$table_obuma_log_webhook} 
+		    $insert_log = $wpdb->query("INSERT INTO {$table_obuma_log_webhook}
 		    								  SET 
 		    								  fecha='".date('Y-m-d')."', 
 		    								  hora='".date('H:i:s')."',
 		    								  peticion='".json_encode($requestBody, JSON_PRETTY_PRINT)."',
 		    								  tipo='Actualizar cliente',
 		    								  resultado='".json_encode($result, JSON_PRETTY_PRINT)."'");
-		    
+
+			if ($insert_log === false) {
+				obuma_webhook_log_insert_fallido('Error log actualizar cliente', $requestBody, $result);
+			}
+
+		}else{
+			obuma_webhook_log_error('Error actualizar cliente', array(
+				'message'       => 'El cliente no existe en woocommerce (obuma_id_customer no encontrado)',
+				'cliente_email' => $cliente_email,
+				'cliente_id'    => $cliente_id,
+			), $requestBody);
 		}
 
+	}else{
+		obuma_webhook_log_error('Error actualizar cliente', array(
+			'message'       => 'La razon social esta vacia o el email no es valido',
+			'cliente_email' => $cliente_email,
+			'cliente_id'    => $cliente_id,
+		), $requestBody);
 	}
 
 }

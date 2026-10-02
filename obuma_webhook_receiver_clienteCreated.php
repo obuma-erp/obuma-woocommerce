@@ -8,6 +8,8 @@ $requestBody = file_get_contents('php://input');
 
 date_default_timezone_set('America/Santiago');
 
+obuma_webhook_capturar_fatales('Error fatal crear cliente', $requestBody);
+
 $client_secret = get_option("api_key");
 echo '<br>$client_secret : '.$client_secret;
 
@@ -17,9 +19,7 @@ $eventId = $decodedBody['eventId'];
 $eventType = $decodedBody['eventType'];
 $eventDate = $decodedBody['eventDate'];
 
-$data = $decodedBody['eventData'];
-$data = stripslashes($data);
-$data = json_decode($data, true);
+$data = obuma_webhook_event_data($decodedBody);
 
 echo '<br>eventId : '.$eventId;
 echo '<br>eventType : '.$eventType;
@@ -41,6 +41,12 @@ echo '<br>signature generated: '.$generatedSignature;
 // verificate the signature
 if ($generatedSignature !== $headerSignature) {
 	echo '<br>Error... signature verification failed';
+	obuma_webhook_log_error('Error firma crear cliente', array(
+		'message'        => 'La firma recibida no coincide con la generada',
+		'eventId'        => $eventId,
+		'eventDate'      => $eventDate,
+		'firma_recibida' => empty($headerSignature) ? 'vacia' : 'presente',
+	), $requestBody);
 	exit;
 
 } else {
@@ -81,15 +87,31 @@ if ($generatedSignature !== $headerSignature) {
 
 
 				$table_obuma_log_webhook = $wpdb->prefix . 'obuma_log_webhook';
-		    	$wpdb->query("INSERT INTO {$table_obuma_log_webhook} 
+		    	$insert_log = $wpdb->query("INSERT INTO {$table_obuma_log_webhook}
 		    								  SET 
 		    								  fecha='".date('Y-m-d')."', 
 		    								  hora='".date('H:i:s')."',
 		    								  peticion='".json_encode($requestBody, JSON_PRETTY_PRINT)."',
 		    								  tipo='Crear cliente',
 		    								  resultado='".json_encode($result, JSON_PRETTY_PRINT)."'");
-						
+
+				if ($insert_log === false) {
+					obuma_webhook_log_insert_fallido('Error log crear cliente', $requestBody, $result);
+				}
+
+		}else{
+			obuma_webhook_log_error('Error crear cliente', array(
+				'message'       => 'WooCommerce no pudo crear el cliente: ' . $user_id->get_error_message(),
+				'cliente_email' => $cliente_email,
+				'cliente_id'    => $cliente_id,
+			), $requestBody);
 		}
+	}else{
+		obuma_webhook_log_error('Error crear cliente', array(
+			'message'       => 'La razon social esta vacia o el email no es valido',
+			'cliente_email' => $cliente_email,
+			'cliente_id'    => $cliente_id,
+		), $requestBody);
 	}
 
 
