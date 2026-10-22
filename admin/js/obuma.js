@@ -9,6 +9,7 @@ jQuery(document).ready(function(){
   var log = [];
   var agregados = 0;
   var actualizados = 0;
+  var omitidos = 0;
   var cabecera = "<div class='panel panel-info' style='margin-top:15px;'><div class='panel-heading'>Resumen de sincronización</div><div class='panel-body'><table class='table table-bordered table-striped table-condensed'>";
   var pie = "</table></div></div>";
   var categorias_seleccionadas = "all";
@@ -287,7 +288,11 @@ let url_obuma_ajax = ajax_object.ajaxurl ? ajax_object.ajaxurl : ajax_object.aja
             resumen += "<tr><td>Actualizado</td><td>"+object[i].name+"</td></tr>"
             actualizados++;
           }
-              
+          if(object[i].action == "omitido"){
+            resumen += "<tr><td>Omitido</td><td>"+object[i].name+"<br><small>"+object[i].detalle+"</small></td></tr>"
+            omitidos++;
+          }
+
         }
       }       
   }
@@ -299,7 +304,7 @@ let url_obuma_ajax = ajax_object.ajaxurl ? ajax_object.ajaxurl : ajax_object.aja
   */
 
   function mostrarResumen(){
-    if(agregados == 0 && actualizados == 0){
+    if(agregados == 0 && actualizados == 0 && omitidos == 0){
       jQuery("#completado").html("<p>No hay cambios</p>");
     }else{
       jQuery("#completado").html(cabecera+resumen+pie);
@@ -340,6 +345,7 @@ let url_obuma_ajax = ajax_object.ajaxurl ? ajax_object.ajaxurl : ajax_object.aja
   function resetear(){
     agregados = 0;
     actualizados = 0;
+    omitidos = 0;
     resumen = "";
     log = [];
     jQuery("#completado").html("");

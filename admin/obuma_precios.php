@@ -87,11 +87,21 @@ if ($cantidad_paginas > 0) {
 					$resumen["resumen"][$indice]["name"] = $pro[0]->post_title;
 					$resumen["resumen"][$indice]["action"] = "actualizado";
 					$indice++;
-					
+
+			}else{
+				$resumen["resumen"][$indice]["name"] = isset($data["producto_nombre"]) ? $data["producto_nombre"] : $producto_codigo_comercial;
+				$resumen["resumen"][$indice]["action"] = "omitido";
+				$resumen["resumen"][$indice]["detalle"] = "El SKU ".$producto_codigo_comercial." no existe en WooCommerce";
+				$indice++;
 			}
-			
+
+		}else{
+			$resumen["resumen"][$indice]["name"] = isset($data["producto_nombre"]) ? $data["producto_nombre"] : "ID Obuma ".$producto_id;
+			$resumen["resumen"][$indice]["action"] = "omitido";
+			$resumen["resumen"][$indice]["detalle"] = "El producto no tiene codigo comercial en Obuma";
+			$indice++;
 		}
-	}	
+	}
 }else{
 	$cantidad_paginas = 0;
 	$pagina = 0;

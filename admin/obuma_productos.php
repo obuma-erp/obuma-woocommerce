@@ -212,7 +212,12 @@ if($cantidad_paginas > 0){
 					$resumen["resumen"][$indice]["action"] = "agregado";
 					$indice++;
 				}
-			
+
+		}else{
+			$resumen["resumen"][$indice]["name"] = !empty($producto_nombre) ? $producto_nombre : "ID Obuma ".$producto_id;
+			$resumen["resumen"][$indice]["action"] = "omitido";
+			$resumen["resumen"][$indice]["detalle"] = empty($producto_codigo_comercial) ? "El producto no tiene codigo comercial en Obuma" : "El producto no tiene nombre en Obuma (SKU ".$producto_codigo_comercial.")";
+			$indice++;
 		}
 	}
 
